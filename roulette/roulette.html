@@ -2,26 +2,14 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Roulette.js Demo</title>
+	<title>Roulette</title>
 	<link rel="stylesheet" href="bootstrap.css"></link>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/ui-lightness/jquery-ui.css">
 	<link rel="stylesheet" href="bootstrap-responsive.css"></link>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/themes/ui-lightness/jquery-ui.css">
-	<link rel="stylesheet" href="demo.css"></link>
+	<link rel="stylesheet" href="global.css"></link>
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="./">るーれっと</a>
-			</div>
-		</div>
-	</div>
 	<div class="container">
 		<div class="page-header" style="">
 			<h1>
@@ -30,14 +18,20 @@
 		</div>
 
 		<div class="row">
+			<!-- roulette -->
 			<div class="span4">
 				<div class="roulette_container" >
 					<div class="roulette" style="display:none;">
-						<img src="http://www55.atwiki.jp/ultrafrontier?cmd=upload&act=open&pageid=154&file=20110525180858_1.jpg"/>
+						<!-- <img src="http://www55.atwiki.jp/ultrafrontier?cmd=upload&act=open&pageid=154&file=20110525180858_1.jpg"/>
 						<img src="http://kurumi-ichitaro.xyz/kurumi-ichitaro/wp-content/uploads/2015/09/16558872.jpeg"/>
 						<img src="https://i.ytimg.com/vi/RjK9m1lxNLs/hqdefault.jpg"/>
 						<img src="https://i.ytimg.com/vi/_OnsGx45ptc/hqdefault.jpg"/>
-						<img src="https://i.ytimg.com/vi/efubnBRA9-A/hqdefault.jpg"/>
+						<img src="https://i.ytimg.com/vi/efubnBRA9-A/hqdefault.jpg"/> -->
+						<img src="./img/man.jpg" />
+						<img src="./img/seven.jpg" />
+						<img src="./img/jack.jpg" />
+						<img src="./img/ace.jpg" />
+						<img src="./img/tarou.jpg" />
 					</div>
 				</div>
 				<div class="btn_container">
@@ -46,12 +40,17 @@
 						<button class="stop btn-large btn btn-warning"> STOP </button>
 					</p>
 				</div>
-				<div class="log_container">
+
+				<!-- Log Message -->
+				<!-- <div class="log_container">
 					<p class="demo_label">Log</p>
 					<div id="msg">
 					</div>
-				</div>
+				</div> -->
 			</div>
+		</div>
+		<div class="row">
+			<!-- parameter slider -->
 			<div class="span4">
 				<div class="right_container">
 					<p class="demo_label">Paramater</p>
@@ -69,16 +68,18 @@
 						<span class="param_name">stop image number :</span> <span class="stop_image_number_param"></span>
 					</div>
 					<input id="stopImageNumber" name="stopImageNumber"/>
-					<span class="image_sample">
+					<!-- <span class="image_sample">
 						<img data-value="0"  src="star.png"/>
 						<img data-value="1"  src="flower.png"/>
 						<img data-value="2"  src="coin.png"/>
 						<img data-value="3"  src="mshroom.png"/>
 						<img data-value="4"  src="chomp.png"/>
 						<img data-value="-1" src="random.png" title="random"/>
-					</span>
+					</span> -->
 				</div>
 			</div>
+			<!-- parameter slider -->
+
 		</div>
 	</div>
 
