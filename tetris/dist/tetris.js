@@ -189,16 +189,29 @@ function valid( offsetX, offsetY, newCurrent ) {
 
 
 // 操作ブロックを盤面にセットする関数
-function freeze() {
-  var currentHeight = (shapes[progress].length) / 4;
-  for ( var y = 0; y < currentHeight; ++y ) {
-    for ( var x = 0; x < 4; ++x ) {
-      if ( current[ y ][ x ] ) {
+// function freeze() {
+//   var currentHeight = (shapes[progress].length) / 4;
+//   for ( var y = 0; y < currentHeight; ++y ) {
+//     for ( var x = 0; x < 4; ++x ) {
+//       console.log(current[y][x]);
+//       if ( current[ y ][ x ]) {
+//         board[ y + currentY ][ x + currentX ] = current[ y ][ x ];
+//       }
+//     }
+//   }
+// }
+
+function freeze(){
+  for(var y = 0; y < ROWS; y++){
+    for(var x = 0; x < 4; x++){
+      if(current[y][x]){
         board[ y + currentY ][ x + currentX ] = current[ y ][ x ];
       }
     }
   }
 }
+
+
 
 // 一行が揃っているか調べ、揃っていたらそれらを消す
 function clearLines() {
