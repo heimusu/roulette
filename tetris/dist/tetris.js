@@ -10,6 +10,7 @@ var currentX, currentY; // 今操作しているブロックの位置
 
 var progress = 0;
 var tickFlg = 0;
+var minusFlg = 0;
 
 // 操作するブロックのパターン
 // var shapes = [
@@ -108,10 +109,16 @@ function newShape() {
 }
 
 function tick() {
+  var currentHeight = (shapes[progress].length) / 4;
   // １つ下へ移動する
-  if ( valid( 0, 1 ) && tickFlg === 0 ) {
-    ++currentY;
+  // if ( valid( 0, 1 ) && tickFlg === 0 ) {
+  //   ++currentY;
+  // }
+  if(tickFlg === 0 && currentY <= (currentHeight)){
+    currentY++;
   }
+
+
   // もし着地していたら(１つしたにブロックがあったら)
   // else {
   //   freeze();  // 操作ブロックを盤面へ固定する
@@ -124,8 +131,22 @@ function tick() {
   //   // 新しい操作ブロックをセットする
   //   newShape();
   // }
-  else if(currentY === 0){
-    tickFlg = 0;
+  else if(currentY < 0){
+    if(currentY <= 0 && minusFlg === 0){
+      --currentY;
+      if(currentY === -currentHeight){
+        minusFlg = 1;
+      }
+    }
+
+    else if(currentY <= 0 && minusFlg === 1){
+      currentY++;
+      if(currentY === 0){
+        minusFlg = 0;
+        tickFlg = 0;
+        return false;
+      }
+    }
   }
 
   else {
@@ -137,12 +158,14 @@ function tick() {
 // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 // ゲームオーバー判定もここで行う
 function valid( offsetX, offsetY, newCurrent ) {
+  // console.log(offsetY);
   offsetX = offsetX || 0;
   offsetY = offsetY || 0;
   offsetX = currentX + offsetX;
   offsetY = currentY + offsetY;
   newCurrent = newCurrent || current;
   var currentHeight = (shapes[progress].length) / 4;
+  // console.log(currentHeight);
   for ( var y = 0; y < currentHeight; ++y ) {
     for ( var x = 0; x < 4; ++x ) {
       if ( newCurrent[ y ][ x ] ) {
