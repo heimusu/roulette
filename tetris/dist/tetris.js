@@ -12,22 +12,6 @@ var progress = 0;
 var tickFlg = 0;
 var minusFlg = 0;
 
-// 操作するブロックのパターン
-// var shapes = [
-//     [ 1, 1, 1, 1 ],
-//     [ 1, 1, 1, 0,
-//       1 ],
-//     [ 1, 1, 1, 0,
-//       0, 0, 1 ],
-//     [ 1, 1, 0, 0,
-//       1, 1 ],
-//     [ 1, 1, 0, 0,
-//       0, 1, 1 ],
-//     [ 0, 1, 1, 0,
-//       1, 1 ],
-//     [ 0, 1, 0, 0,
-//       1, 1, 1 ]
-// ];
 
 var shapes = [
   //縦10横1
@@ -110,27 +94,22 @@ function newShape() {
 
 function tick() {
   var currentHeight = (shapes[progress].length) / 4;
+  if(currentHeight <= 1){
+    currentHeight = 1;
+  }
+  console.log(currentY);
+  console.log(ROWS);
   // １つ下へ移動する
   // if ( valid( 0, 1 ) && tickFlg === 0 ) {
   //   ++currentY;
   // }
-  if(tickFlg === 0 && currentY <= (currentHeight)){
+  // if(tickFlg === 0 && currentY <= (currentHeight)){
+  //   currentY++;
+  // }
+  if(tickFlg === 0 && currentY < 11){
     currentY++;
   }
 
-
-  // もし着地していたら(１つしたにブロックがあったら)
-  // else {
-  //   freeze();  // 操作ブロックを盤面へ固定する
-  //   clearLines();  // ライン消去処理
-  //   if (lose) {
-  //     // もしゲームオーバなら最初から始める
-  //     newGame();
-  //     return false;
-  //   }
-  //   // 新しい操作ブロックをセットする
-  //   newShape();
-  // }
   else if(currentY < 0){
     if(currentY <= 0 && minusFlg === 0){
       --currentY;
@@ -204,9 +183,10 @@ function valid( offsetX, offsetY, newCurrent ) {
 function freeze(){
   for(var y = 0; y < ROWS; y++){
     for(var x = 0; x < 4; x++){
-      if(current[y][x]){
-        board[ y + currentY ][ x + currentX ] = current[ y ][ x ];
-      }
+      console.log(currentY);
+      // if(current[y][x]){
+      //   // board[ y + currentY ][ x + currentX ] = current[ y ][ x ];
+      // }
     }
   }
 }
