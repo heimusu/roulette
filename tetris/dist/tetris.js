@@ -40,6 +40,9 @@ var shapes = [
   [1,0]
 ];
 
+var blockHeight = [10, 9, 8, 7, 6, 5, 4, 12, 2, 1];
+var blockWidth = [1, 1, 1, 1, 1, 4, 1, 2, 3, 1];
+
 // ブロックの色
 var colors = [
     'cyan', 'orange', 'blue', 'yellow', 'red', 'green', 'purple'
@@ -97,8 +100,8 @@ function tick() {
   if(currentHeight <= 1){
     currentHeight = 1;
   }
-  console.log(currentY);
-  console.log(ROWS);
+  // console.log(currentY);
+  // console.log(ROWS);
   // １つ下へ移動する
   // if ( valid( 0, 1 ) && tickFlg === 0 ) {
   //   ++currentY;
@@ -181,12 +184,22 @@ function valid( offsetX, offsetY, newCurrent ) {
 // }
 
 function freeze(){
-  for(var y = 0; y < ROWS; y++){
-    for(var x = 0; x < 4; x++){
-      console.log(currentY);
-      // if(current[y][x]){
-      //   // board[ y + currentY ][ x + currentX ] = current[ y ][ x ];
-      // }
+  // console.log(currentY);
+  var currentBlockHeight = blockHeight[progress];
+  var currentBlockWidth = blockWidth[progress];
+
+  for(var y = 0; y < currentBlockHeight; y++){
+    for(var x = 0; x < currentBlockWidth; x++){
+      if((y + currentY) >= ROWS){
+        return false;
+      }
+      else if(currentY < 0){
+        if(y < (currentBlockHeight + currentY) )
+        board[y][x + currentX] = 1;
+      }
+      else{
+        board[y + currentY][x + currentX] = 1;
+      }
     }
   }
 }
