@@ -13,6 +13,11 @@ var tickFlg = 0;
 var minusFlg = 0;
 
 
+//盤面上の成否判定エリア
+var safeTop = 0;
+var safeBottom = ROWS;
+
+
 var shapes = [
   //縦10横1
   [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0 ,1,0,0,0, 1,0,0,0, 1,0,0,0,
@@ -185,9 +190,11 @@ function valid( offsetX, offsetY, newCurrent ) {
 
 function freeze(){
   // console.log(currentY);
+  //現在のブロックのパラメータ
   var currentBlockHeight = blockHeight[progress];
   var currentBlockWidth = blockWidth[progress];
 
+  //ブロックの描画
   for(var y = 0; y < currentBlockHeight; y++){
     for(var x = 0; x < currentBlockWidth; x++){
       if((y + currentY) >= ROWS){
@@ -203,6 +210,46 @@ function freeze(){
     }
   }
 }
+
+function check(){
+  var currentBlockHeight = blockHeight[progress];
+  //セーフなエリアのTOP
+  // console.log(currentY);
+  var currentTop = currentY;
+  //セーフなエリアのBOTTOM
+  // console.log(currentY + currentBlockHeight);
+  var currentBottom = currentY + currentBlockHeight;
+
+  //大小判定
+  if(currentTop < 0){
+    currentTop = 0;
+  }
+
+  if(currentBottom >= ROWS){
+    currentBottom >= ROWS;
+  }
+
+
+  // 成否判定
+  // 最初の一回は判定外
+  if(progress === 0){
+    safeTop = currentTop;
+    safeBottom = currentBottom;
+  }
+  else{
+    var safeArea = safeBottom - safeTop;
+    var currentArea = currentBottom - currentTop;
+    if(currentTop > safeBottom || currentBottom < safeTop){
+      alert("hoge")
+      lose = true;
+    }
+    else{
+      safeTop = currentTop;
+      safeBottom = currentBottom;
+    }
+  }
+}
+
 
 
 

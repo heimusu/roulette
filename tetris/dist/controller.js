@@ -46,6 +46,7 @@ function keyPress( key ) {
     break;
   case 'enter':
     freeze();
+    check();
     progress++;
     newShape();
   }
