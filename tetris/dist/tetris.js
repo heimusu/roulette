@@ -100,32 +100,38 @@ function newShape() {
   currentY = 0;
 }
 
+//画面の更新・ブロックの動きを司る関数
 function tick() {
+  //現在の高さ
   var currentHeight = (shapes[progress].length) / 4;
+
+  //エスケープ処理
   if(currentHeight <= 1){
     currentHeight = 1;
   }
-  // console.log(currentY);
-  // console.log(ROWS);
-  // １つ下へ移動する
-  // if ( valid( 0, 1 ) && tickFlg === 0 ) {
-  //   ++currentY;
-  // }
-  // if(tickFlg === 0 && currentY <= (currentHeight)){
-  //   currentY++;
-  // }
+
+
+  //ブロックを下向きに動かす
   if(tickFlg === 0 && currentY < 11){
     currentY++;
+    //SEを鳴らす
+    if(currentY === 11){
+      se1();
+    }
   }
 
+  //ブロックを上向きに動かす
   else if(currentY < 0){
     if(currentY <= 0 && minusFlg === 0){
       --currentY;
+      //エスケープ処理
       if(currentY === -currentHeight){
+        se1();
         minusFlg = 1;
       }
     }
 
+    //上限に達したらブロックの進行方向を下向きにする
     else if(currentY <= 0 && minusFlg === 1){
       currentY++;
       if(currentY === 0){
@@ -136,6 +142,7 @@ function tick() {
     }
   }
 
+  //ブロックを上向きに動かす
   else {
     --currentY;
     tickFlg = 1;
@@ -251,6 +258,9 @@ function check(){
 }
 
 
+function se1(){
+  document.getElementById( 'se1' ).play() ;
+}
 
 
 // 一行が揃っているか調べ、揃っていたらそれらを消す
@@ -285,7 +295,7 @@ function newGame() {
   init();  // 盤面をまっさらにする
   newShape();  // 操作ブロックをセット
   lose = false;  // 負けフラッグ
-  interval = setInterval( tick, 250 );  // 250ミリ秒ごとにtickという関数を呼び出す
+  interval = setInterval( tick, 100 );  // 250ミリ秒ごとにtickという関数を呼び出す
 }
 
 newGame();
