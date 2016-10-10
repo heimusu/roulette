@@ -45,6 +45,7 @@ function keyPress( key ) {
     }
     break;
   case 'enter':
+    se2();
     freeze();
     check();
     progress++;

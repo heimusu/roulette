@@ -243,13 +243,19 @@ function check(){
     safeTop = currentTop;
     safeBottom = currentBottom;
   }
+  //2ブロック目以降
   else{
+    //セーフな高さと低さを設定
     var safeArea = safeBottom - safeTop;
     var currentArea = currentBottom - currentTop;
+
+    //低まったらゲームオーバー
     if(currentTop > safeBottom || currentBottom < safeTop){
-      alert("hoge")
+      se3();
+      // alert("hoge")
       lose = true;
     }
+    //新しいセーフエリアの設定
     else{
       safeTop = currentTop;
       safeBottom = currentBottom;
@@ -257,9 +263,22 @@ function check(){
   }
 }
 
-
+// reflect 音
 function se1(){
   document.getElementById( 'se1' ).play() ;
+}
+
+// enter 音
+function se2(){
+  document.getElementById( 'se2' ).play() ;
+}
+
+// gameover 音
+function se3(){
+  document.getElementById( 'se3' ).play() ;
+  alert('game over');
+  progress = 11;
+  init();  // 盤面をまっさらにする
 }
 
 
