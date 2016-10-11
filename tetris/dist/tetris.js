@@ -243,6 +243,11 @@ function check(){
     safeTop = currentTop;
     safeBottom = currentBottom;
   }
+
+  else if(progress === 9){
+    clear();
+  }
+
   //2ブロック目以降
   else{
     //セーフな高さと低さを設定
@@ -250,15 +255,33 @@ function check(){
     var currentArea = currentBottom - currentTop;
 
     //低まったらゲームオーバー
-    if(currentTop > safeBottom || currentBottom < safeTop){
+    if(currentTop > safeBottom - 1 || currentBottom < safeTop){
+      console.log('currentTop ' + currentTop);
+      console.log('currentBottom ' + currentBottom);
+      console.log('safeTop ' + safeTop );
+      console.log('safeBottom ' + safeBottom);
       se3();
       // alert("hoge")
       lose = true;
     }
     //新しいセーフエリアの設定
     else{
+      //WIP
+      //上下ともに，ハミ出したブロックは消す
+      //消してから，落とす処理を加える
+      if(safeTop < currentTop){
+        var currentBlockWidth = blockWidth[progress];
+        for(var x = currentX; x < currentBlockWidth; x++){
+          for(var y = safeBottom; y < ROWS; y++){
+            board[y][progress] = 0;
+          }
+        }
+      }
       safeTop = currentTop;
       safeBottom = currentBottom;
+      // for(var y = safeBottom; y <= ROWS; y++){
+      //   console.log(y);
+      // }
     }
   }
 }
@@ -277,8 +300,12 @@ function se2(){
 function se3(){
   document.getElementById( 'se3' ).play() ;
   alert('game over');
-  progress = 11;
+  progress = 12;
   init();  // 盤面をまっさらにする
+}
+
+function clear(){
+  alert('clear');
 }
 
 
