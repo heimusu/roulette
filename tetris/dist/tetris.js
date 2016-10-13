@@ -261,7 +261,6 @@ function check(){
       console.log('safeTop ' + safeTop );
       console.log('safeBottom ' + safeBottom);
       se3();
-      // alert("hoge")
       lose = true;
     }
     //新しいセーフエリアの設定
@@ -269,16 +268,30 @@ function check(){
       //WIP
       //上下ともに，ハミ出したブロックは消す
       //消してから，落とす処理を加える
-      if(safeTop < currentTop){
+      console.log('currentTop ' + currentTop);
+      console.log('currentBottom ' + currentBottom);
+      console.log('safeTop ' + safeTop );
+      console.log('safeBottom ' + safeBottom);
+      //上にはみ出した分を消す
+      if(safeTop > currentTop){
         var currentBlockWidth = blockWidth[progress];
-        for(var x = currentX; x < currentBlockWidth; x++){
-          for(var y = safeBottom; y < ROWS; y++){
-            board[y][progress] = 0;
+        for(var x = currentX; x < currentX + currentBlockWidth; x++){
+          for(var y = currentTop; y < safeTop; y++){
+            board[y][x] = 0;
           }
         }
       }
-      safeTop = currentTop;
-      safeBottom = currentBottom;
+
+      //下にはみ出した分を消す
+      if(safeBottom < currentBottom){
+        var currentBlockWidth = blockWidth[progress];
+        for(var x = currentX; x < currentX + currentBlockWidth; x++){
+          for(var y = safeBottom; y < ROWS; y++){
+            board[y][x] = 0;
+          }
+        }
+      }
+
       // for(var y = safeBottom; y <= ROWS; y++){
       //   console.log(y);
       // }
