@@ -17,6 +17,15 @@ var minusFlg = 0;
 var safeTop = 0;
 var safeBottom = ROWS;
 
+//速度ロジック
+var speed = 110;
+var breakFlg = 0;
+
+
+//画像
+var src = "./img/ace.jpg";
+var img = new Image();
+img.src = src;
 
 var shapes = [
   //縦10横1
@@ -98,6 +107,7 @@ function newShape() {
     currentX = progress;
   }
   currentY = 0;
+
 }
 
 //画面の更新・ブロックの動きを司る関数
@@ -277,7 +287,10 @@ function check(){
         var currentBlockWidth = blockWidth[progress];
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = currentTop; y < safeTop; y++){
-            board[y][x] = 0;
+            // board[y][x] = 0;
+            if(board[y][x] === 1){
+              board[y][x] = 0;
+            }
           }
         }
       }
@@ -287,14 +300,28 @@ function check(){
         var currentBlockWidth = blockWidth[progress];
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = safeBottom; y < ROWS; y++){
-            board[y][x] = 0;
+            if(board[y][x] === 1){
+              board[y][x] = 0;
+            }
           }
         }
       }
+    }
 
-      // for(var y = safeBottom; y <= ROWS; y++){
-      //   console.log(y);
-      // }
+    safeTop = currentTop;
+    safeBottom = currentBottom;
+
+  }
+}
+
+//fadeout function
+function fadeOut(y, x){
+  console.log('fadeout');
+  var currentBlockWidth = blockWidth[progress];
+  for(var i = currentX; x < currentX + currentBlockWidth; x++){
+    for(var j = y; j < ROWS - 1; j++){
+      board[j][i] = 0;
+      board[j + 1][i] = 1;
     }
   }
 }
@@ -348,13 +375,37 @@ function clearLines() {
 }
 
 
+function go(){
+  //ブロック速度の加速
+  if(progress === 2){
+    speed = speed - 5;
+  }
+
+  else if(progress === 4){
+    speed = speed - 5;
+  }
+
+  else if(progress === 5){
+    speed = speed - 5;
+  }
+
+  else if(progress === 7){
+    speed = speed - 5;
+  }
+
+  console.log(speed);
+  interval = setInterval(tick,speed);
+}
+
 //initialize
 function newGame() {
   clearInterval(interval);  // ゲームタイマーをクリア
   init();  // 盤面をまっさらにする
   newShape();  // 操作ブロックをセット
   lose = false;  // 負けフラッグ
-  interval = setInterval( tick, 100 );  // 250ミリ秒ごとにtickという関数を呼び出す
+  // interval = setInterval( tick, speed );  // 250ミリ秒ごとにtickという関数を呼び出す
+  // interval = go();
 }
 
 newGame();
+go();

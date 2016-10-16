@@ -45,11 +45,23 @@ function keyPress( key ) {
     }
     break;
   case 'enter':
-    se2();
-    freeze();
-    check();
-    progress++;
-    newShape();
+
+
+    if(breakFlg === 0){
+      se2();
+      freeze();
+      check();
+      progress++;
+      tickFlg = 0;
+      clearInterval(interval);
+      breakFlg = 1;
+    }
+    else if(breakFlg ===1 ){
+      breakFlg = 0;
+      newShape();
+      go();
+    }
+    break;
   }
 }
 
