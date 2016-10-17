@@ -23,6 +23,7 @@ function render() {
   ctx.strokeStyle = 'black';  // えんぴつの色を黒にする
 
   var currentHeight = (shapes[progress].length) / 4;
+  var currentBlockWidth = blockWidth[progress];
 
   // 盤面を描画する
   for ( var x = 0; x < COLS; ++x ) {
@@ -36,11 +37,11 @@ function render() {
 
   // 操作ブロックを描画する
   for ( var y = 0; y < currentHeight; ++y ) {
-    for ( var x = 0; x < 10; ++x ) {
-      if ( current[ y ][ x ] ) {
-        ctx.fillStyle = colors[ current[ y ][ x ] - 1 ];  // マスの種類に合わせて塗りつぶす色を設定
+    for ( var x = 0; x < currentBlockWidth; ++x ) {
+      // if ( current[ y ][ x ] ) {
+        // ctx.fillStyle = colors[ current[ y ][ x ] - 1 ];  // マスの種類に合わせて塗りつぶす色を設定
         drawBlock( currentX + x, currentY + y );  // マスを描画
-      }
+      // }
     }
   }
 }

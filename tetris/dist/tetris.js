@@ -93,6 +93,8 @@ function newShape() {
       }
     }
   }
+  console.log(current);
+
   // ブロックを盤面の上のほうにセットする
   if(id === 6 || id === 7){
     currentX = progress + 3;
@@ -254,9 +256,9 @@ function check(){
     safeBottom = currentBottom;
   }
 
-  else if(progress === 9){
-    clear();
-  }
+  // else if(progress === 9){
+  //   clear();
+  // }
 
   //2ブロック目以降
   else{
@@ -301,7 +303,9 @@ function check(){
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = safeBottom; y < ROWS; y++){
             if(board[y][x] === 1){
-              board[y][x] = 0;
+              // board[y][x] = 0;
+              // setInterval(fadeOut(y, x), 50);
+              fadeOut(y,x);
             }
           }
         }
@@ -317,13 +321,15 @@ function check(){
 //fadeout function
 function fadeOut(y, x){
   console.log('fadeout');
-  var currentBlockWidth = blockWidth[progress];
-  for(var i = currentX; x < currentX + currentBlockWidth; x++){
-    for(var j = y; j < ROWS - 1; j++){
-      board[j][i] = 0;
-      board[j + 1][i] = 1;
-    }
+  if(y < ROWS - 1){
+    board[y + 1][x] = board[y][x];
+    render();
   }
+  board[y][x] = 0;
+  // for(var j = y; j < ROWS - 1; j++){
+  //   board[j][x] = 0;
+  //   board[j + 1][x] = board[j][x];
+  // }
 }
 
 // reflect 音

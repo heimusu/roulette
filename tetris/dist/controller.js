@@ -8,7 +8,8 @@ document.body.onkeydown = function( e ) {
     39: 'right',
     40: 'down',
     38: 'rotate',
-    13: 'enter'
+    13: 'enter',
+    81: 'q'
   };
 
   if ( typeof keys[ e.keyCode ] != 'undefined' ) {
@@ -49,11 +50,25 @@ function keyPress( key ) {
 
     if(breakFlg === 0){
       se2();
+      clearInterval(interval);
       freeze();
       check();
+      if(progress === 2){
+        // $('#img1').css('display', 'block');
+        $('#img1').fadeIn('slow');
+      }
+      else if(progress === 5){
+        // $('#img2').css('display', 'block');
+        $('#img2').fadeIn('slow');
+      }
+      else if(progress === 9){
+        // $('#img3').css('display', 'block');
+        $('#img3').fadeIn('slow');
+        clear();
+      }
       progress++;
       tickFlg = 0;
-      clearInterval(interval);
+      // clearInterval(interval);
       breakFlg = 1;
     }
     else if(breakFlg ===1 ){
@@ -61,6 +76,10 @@ function keyPress( key ) {
       newShape();
       go();
     }
+    break;
+  case 'q':
+    // $('img').css('display', 'none');
+    $('img').fadeOut();
     break;
   }
 }
