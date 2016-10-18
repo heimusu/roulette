@@ -149,9 +149,15 @@ function tick() {
       if(currentY === 0){
         minusFlg = 0;
         tickFlg = 0;
-        return false;
+        // return false;
       }
     }
+  }
+
+  else if(progress === 9 && currentY === 0){
+    currentY = -1;
+    minusFlg = 0;
+    tickFlg = 0;
   }
 
   //ブロックを上向きに動かす
@@ -212,8 +218,6 @@ function freeze(){
   //現在のブロックのパラメータ
   var currentBlockHeight = blockHeight[progress];
   var currentBlockWidth = blockWidth[progress];
-
-
 
   //ブロックの描画
   for(var y = 0; y < currentBlockHeight; y++){
@@ -291,8 +295,7 @@ function check(){
         var currentBlockWidth = blockWidth[progress];
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = currentTop; y < safeTop; y++){
-            // board[y][x] = 0;
-            if(board[y][x] === 1){
+            if(board[y][x]){
               board[y][x] = 0;
             }
           }
