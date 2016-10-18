@@ -29,20 +29,22 @@ function render() {
   ctx.strokeStyle = 'black';  // えんぴつの色を黒にする
 
   var currentHeight = block[progress].height;
+  var currentWidth = block[progress].width;
 
   // 盤面を描画する
   for ( var x = 0; x < COLS; ++x ) {
     for ( var y = 0; y < ROWS; ++y ) {
-      if ( board[ y ][ x ] ) {  // マスが空、つまり0ではなかったら
+      if ( board._table[ y ][ x ] ) {  // マスが空、つまり0ではなかったら
         ctx.fillStyle = COLOR;
         drawBlock( x, y );  // マスを描画
       }
     }
   }
 
+  console.log(current);
   // 操作ブロックを描画する
   for ( var y = 0; y < currentHeight; ++y ) {
-    for ( var x = 0; x < 10; ++x ) {
+    for ( var x = 0; x < currentWidth; ++x ) {
       if ( current[ y ][ x ] ) {
         ctx.fillStyle = COLOR;
         drawBlock( currentX + x, currentY + y );  // マスを描画

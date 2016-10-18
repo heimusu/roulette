@@ -45,12 +45,10 @@ function keyPress( key ) {
     }
     break;
   case 'enter':
-
-
     if(breakFlg === 0){
       se2();
-      freeze();
-      check();
+      board.freeze();
+      board.check();
       progress++;
       tickFlg = 0;
       clearInterval(interval);
@@ -63,17 +61,4 @@ function keyPress( key ) {
     }
     break;
   }
-}
-
-
-// 操作ブロックを回す処理
-function rotate( current ) {
-  var newCurrent = [];
-  for ( var y = 0; y < 4; ++y ) {
-    newCurrent[ y ] = [];
-    for ( var x = 0; x < 4; ++x ) {
-      newCurrent[ y ][ x ] = current[ 3 - x ][ y ];
-    }
-  }
-  return newCurrent;
 }
