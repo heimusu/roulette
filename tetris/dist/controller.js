@@ -64,7 +64,7 @@ function keyPress( key ) {
       else if(progress === 9){
         // $('#img3').css('display', 'block');
         $('#img3').fadeIn('slow');
-        clear();
+        // clear();
       }
       progress++;
       tickFlg = 0;

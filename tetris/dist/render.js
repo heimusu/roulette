@@ -50,10 +50,10 @@ function render() {
   // 操作ブロックを描画する
   for ( var y = 0; y < currentHeight; ++y ) {
     for ( var x = 0; x < currentBlockWidth; ++x ) {
-      // if ( current[ y ][ x ] ) {
+      if ( current[ y ][ x ] ) {
         // ctx.fillStyle = colors[ current[ y ][ x ] - 1 ];  // マスの種類に合わせて塗りつぶす色を設定
         drawBlock( currentX + x, currentY + y );  // マスを描画
-      // }
+      }
     }
   }
 }
