@@ -11,12 +11,14 @@ var H = window.parent.screen.height;
 
 // var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;  // マスの幅を設定
 var BLOCK_W = W / COLS, BLOCK_H = W / COLS;  // マスの幅を設定
-document.getElementsByTagName('canvas')[0].width = 2560;
-document.getElementsByTagName('canvas')[0].height = 1440;
-console.log(document.getElementsByTagName('canvas')[0].width);
-console.log(document.getElementsByTagName('canvas')[0].height);
-console.log( window.parent.screen.width );
-console.log( window.parent.screen.height );
+// document.getElementsByTagName('canvas')[0].width = 2560;
+// document.getElementsByTagName('canvas')[0].height = 1440;
+document.getElementsByTagName('canvas')[0].width = window.parent.screen.width;
+document.getElementsByTagName('canvas')[0].height = window.parent.screen.height;
+// console.log(document.getElementsByTagName('canvas')[0].width);
+// console.log(document.getElementsByTagName('canvas')[0].height);
+// console.log( window.parent.screen.width );
+// console.log( window.parent.screen.height );
 
 
 // x, yの部分へマスを描画する処理
