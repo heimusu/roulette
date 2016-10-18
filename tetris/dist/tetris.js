@@ -211,23 +211,19 @@ Game.prototype.tick = function() {
 
   //ブロックを下向きに動かす
   if(this.tickFlg === 0 && this.currentY < 11){
-    console.log('flg-down: '+this.currentY);
     ++this.currentY;
     //SEを鳴らす
     if(this.currentY === 11){
       this.sound.play(SoundType.Reflect);
-      console.log('downer reflect');
     }
   }
 
   //ブロックを上向きに動かす
   else if(this.currentY < 0){
     if(this.currentY <= 0 && this.minusFlg === 0){
-      console.log('up: '+this.currentY);
       --this.currentY;
       //エスケープ処理
       if(this.currentY === -currentHeight){
-        console.log('upper reflect');
         this.sound.play(SoundType.Reflect);
         this.minusFlg = 1;
       }
@@ -235,10 +231,8 @@ Game.prototype.tick = function() {
 
     //上限に達したらブロックの進行方向を下向きにする
     else if(this.currentY <= 0 && this.minusFlg === 1){
-      console.log('down: '+this.currentY);
       this.currentY++;
       if(this.currentY === 0){
-        console.log('reflect');
         this.minusFlg = 0;
         this.tickFlg = 0;
         return false;
@@ -248,7 +242,6 @@ Game.prototype.tick = function() {
 
   //ブロックを上向きに動かす
   else {
-    console.log('up*: '+this.currentY);
     --this.currentY;
     this.tickFlg = 1;
   }
