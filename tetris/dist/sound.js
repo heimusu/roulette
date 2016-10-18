@@ -1,7 +1,7 @@
 SoundType = {
-  Reflect: 1,
-  Select: 2,
-  GameOver: 3
+  Reflect: 0,
+  Select: 1,
+  GameOver: 2 
 }
 
 SoundTable = [

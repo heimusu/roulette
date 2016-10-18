@@ -7,7 +7,8 @@ var ctx = canvas.getContext( '2d' ); // コンテクスト
 //新キャンバスサイズ
 var W = 1200, H = 800;  // キャンバスのサイズ
 // var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;  // マスの幅を設定
-var BLOCK_W = W / COLS, BLOCK_H = W / COLS;  // マスの幅を設定
+var BLOCK_W = W / game.board.width;
+BLOCK_H = H / game.board.height;  // マスの幅を設定
 var COLOR = '#000';
 
 //画像
@@ -28,13 +29,10 @@ function render() {
   ctx.clearRect( 0, 0, W, H );  // 一度キャンバスを真っさらにする
   ctx.strokeStyle = 'black';  // えんぴつの色を黒にする
 
-  var currentHeight = blockPattern[progress].height;
-  var currentWidth = blockPattern[progress].width;
-
   // 盤面を描画する
-  for ( var x = 0; x < COLS; ++x ) {
-    for ( var y = 0; y < ROWS; ++y ) {
-      if ( board._table[ y ][ x ] ) {  // マスが空、つまり0ではなかったら
+  for ( var x = 0; x < game.board.width; ++x ) {
+    for ( var y = 0; y < game.board.height; ++y ) {
+      if ( game.board._table[ y ][ x ] ) {  // マスが空、つまり0ではなかったら
         ctx.fillStyle = COLOR;
         drawBlock( x, y );  // マスを描画
       }
@@ -42,11 +40,12 @@ function render() {
   }
 
   // 操作ブロックを描画する
-  for ( var y = 0; y < currentHeight; ++y ) {
-    for ( var x = 0; x < currentWidth; ++x ) {
-      if ( current[ y ][ x ] ) {
+  for ( var y = 0; y < game.currentBlock.height; ++y ) {
+    for ( var x = 0; x < game.currentBlock.width; ++x ) {
+      if ( game.current[ y ][ x ] ) {
         ctx.fillStyle = COLOR;
-        drawBlock( currentX + x, currentY + y );  // マスを描画
+        console.log(game.current);
+        drawBlock( game.currentX + x, game.currentY + y );  // マスを描画
       }
     }
   }

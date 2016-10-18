@@ -23,41 +23,37 @@ document.body.onkeydown = function( e ) {
 function keyPress( key ) {
   switch ( key ) {
   case 'left':
-    if ( valid( -1 ) ) {
-      --currentX;  // 左に一つずらす
+    console.log('input left');
+    if ( game.valid( -1 ) ) {
+      --game.currentX;  // 左に一つずらす
     }
     break;
   case 'right':
-    if ( valid( 1 ) ) {
-      ++currentX;  // 右に一つずらす
+    console.log('input right');
+    if ( game.valid( 1 ) ) {
+      ++game.currentX;  // 右に一つずらす
     }
     break;
   case 'down':
-    if ( valid( 0, 1 ) ) {
-      ++currentY;  // 下に一つずらす
-    }
-    break;
-  case 'rotate':
-    // 操作ブロックを回す
-    var rotated = rotate( current );
-    if ( valid( 0, 0, rotated ) ) {
-      current = rotated;  // 回せる場合は回したあとの状態に操作ブロックをセットする
+    console.log('input down');
+    if ( game.valid( 0, 1 ) ) {
+      ++game.currentY;  // 下に一つずらす
     }
     break;
   case 'enter':
-    if(breakFlg === 0){
-      sound.play(SoundType.Select);
-      board.freeze();
-      board.check();
-      progress++;
-      tickFlg = 0;
-      clearInterval(interval);
-      breakFlg = 1;
+    if(game.breakFlg === 0){
+      game.sound.play(SoundType.Select);
+      game.freeze();
+      game.check();
+      game.progress++;
+      game.tickFlg = 0;
+      clearInterval(game.interval);
+      game.breakFlg = 1;
     }
-    else if(breakFlg ===1 ){
-      breakFlg = 0;
-      newShape();
-      go();
+    else if(game.breakFlg ===1 ){
+      game.breakFlg = 0;
+      game.newShape();
+      game.go();
     }
     break;
   }

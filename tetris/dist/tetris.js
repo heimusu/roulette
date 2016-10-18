@@ -1,33 +1,9 @@
-//旧サイズ
-//var COLS = 10, ROWS = 20;  // 横10、縦20マス
-//新サイズ
-var COLS = 16, ROWS = 12;  // 横10、縦20マス
-var board = null;
-var lose;  // 一番上までいっちゃったかどうか
-var interval;  // ゲームを実行するタイマーを保持する変数
-var current; // 今操作しているブロックの形
-var currentX, currentY; // 今操作しているブロックの位置
-var sound = new Sound();
-
-var progress = 0;
-var tickFlg = 0;
-var minusFlg = 0;
-
-
-//盤面上の成否判定エリア
-var safeTop = 0;
-var safeBottom = ROWS;
-
-//速度ロジック
-var speed = 110;
-var breakFlg = 0;
-
 var Block = function(_width, _height) {
   this.width = _width;
   this.height = _height;
-}
+};
 
-var blockPattern = [
+var BlockPattern = [
   new Block(1,10),
   new Block(1,9),
   new Block(1,8),
@@ -38,195 +14,130 @@ var blockPattern = [
   new Block(2,12),
   new Block(3,2),
   new Block(1,1)
-]
+];
 
 var Board = function() {
   this._table = [];
-}
+  this.width = 16;
+  this.height = 12; 
+};
+
 Board.prototype.init = function() {
-  for ( var y = 0; y < ROWS; ++y ) {
+  for ( var y = 0; y < this.height; ++y ) {
     this._table[ y ] = [];
-    for ( var x = 0; x < COLS; ++x ) {
+    for ( var x = 0; x < this.width; ++x ) {
       this._table[ y ][ x ] = 0;
     }
   }
-}
+};
 
-// shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
-function newShape() {
-  var id = progress;
-  var currentBlock = blockPattern[id];
-
-  // パターンを操作ブロックへセットする
-  current = [];
-  for ( var y = 0; y < currentBlock.height; ++y ) {
-    current[ y ] = [];
-    for ( var x = 0; x < currentBlock.width; ++x ) {
-      current[ y ][ x ] = id + 1;
-    }
-  }
-  // ブロックを盤面の上のほうにセットする
-  if(id === 6 || id === 7){
-    currentX = progress + 3;
-  }
-  else if(id === 8){
-    currentX = progress + 4;
-  }
-  else if(id === 9){
-    currentX = progress + 6;
-  }
-  else{
-    currentX = progress;
-  }
-  currentY = 0;
-}
-
-//画面の更新・ブロックの動きを司る関数
-function tick() {
-  //現在の高さ
-  var currentHeight = blockPattern[progress].height;
-
-  //エスケープ処理
-  if(currentHeight <= 1){
-    currentHeight = 1;
-  }
-
-  //ブロックを下向きに動かす
-  if(tickFlg === 0 && currentY < 11){
-    currentY++;
-    //SEを鳴らす
-    if(currentY === 11){
-      sound.play(SoundType.Reflect);
-    }
-  }
-
-  //ブロックを上向きに動かす
-  else if(currentY < 0){
-    if(currentY <= 0 && minusFlg === 0){
-      --currentY;
-      //エスケープ処理
-      if(currentY === -currentHeight){
-        sound.play(SoundType.Reflect);
-        minusFlg = 1;
-      }
-    }
-
-    //上限に達したらブロックの進行方向を下向きにする
-    else if(currentY <= 0 && minusFlg === 1){
-      currentY++;
-      if(currentY === 0){
-        minusFlg = 0;
-        tickFlg = 0;
-        return false;
-      }
-    }
-  }
-
-  //ブロックを上向きに動かす
-  else {
-    --currentY;
-    tickFlg = 1;
-  }
-}
+var Game = function() {
+  this.lose = null;  // 一番上までいっちゃったかどうか
+  this.interval = null;  // ゲームを実行するタイマーを保持する変数
+  this.speed = 110;
+  this.breakFlg = 0;
+  this.progress = 0;
+  this.tickFlg = 0;
+  this.minusFlg = 0;
+  this.current = null; // 今操作しているブロックの形
+  this.currentX = -1;
+  this.currentY = -1; // 今操作しているブロックの位置
+  this.board = new Board();
+  this.sound = new Sound();
+  this.safeTop = 0;
+  this.safeBottom = this.board.height;
+};
 
 // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 // ゲームオーバー判定もここで行う
-Board.prototype.valid = function ( offsetX, offsetY, newCurrent ) {
+Game.prototype.valid = function ( offsetX, offsetY, newCurrent ) {
   // console.log(offsetY);
   offsetX = offsetX || 0;
   offsetY = offsetY || 0;
-  offsetX = currentX + offsetX;
-  offsetY = currentY + offsetY;
-  newCurrent = newCurrent || current;
-  var currentHeight = blockPattern[progress].height;
+  offsetX = this.currentX + offsetX;
+  offsetY = this.currentY + offsetY;
+  newCurrent = newCurrent || this.current;
   // console.log(currentHeight);
-  for ( var y = 0; y < currentHeight; ++y ) {
-    for ( var x = 0; x < 4; ++x ) {
+  for ( var y = 0; y < this.currentBlock.height; ++y ) {
+    for ( var x = 0; x < this.currentBlock.width; ++x ) {
       if ( newCurrent[ y ][ x ] ) {
-        if ( typeof this._table[ y + offsetY ] == 'undefined'
-             || typeof this._table[ y + offsetY ][ x + offsetX ] == 'undefined'
-             || this._table[ y + offsetY ][ x + offsetX ]
-             || x + offsetX < 0
-             || y + offsetY >= ROWS
-             || x + offsetX >= COLS ) {
-                    if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1) {
-                        console.log('game over');
-                        lose = true; // もし操作ブロックが盤面の上にあったらゲームオーバーにする
-                    }
-               return false;
-             }
+        if ( typeof this.board._table[ y + offsetY ] == 'undefined'
+            || typeof this.board._table[ y + offsetY ][ x + offsetX ] == 'undefined'
+            || this.board._table[ y + offsetY ][ x + offsetX ]
+            || x + offsetX < 0
+            || y + offsetY >= this.board.height
+            || x + offsetX >= this.board.width ) {
+          if (offsetY === 1 && offsetX - this.currentX === 0
+              && offsetY - this.currentY === 1) {
+            console.log('game over');
+            this.lose = true; // もし操作ブロックが盤面の上にあったらゲームオーバーにする
+          }
+          return false;
+        }
       }
     }
   }
   return true;
-}
+};
 
-Board.prototype.freeze = function(){
-  // console.log(currentY);
-  //現在のブロックのパラメータ
-  var currentBlockHeight = blockPattern[progress].height;
-  var currentBlockWidth = blockPattern[progress].width;
+Game.prototype.freeze = function(){
 
   //ブロックの描画
-  for(var y = 0; y < currentBlockHeight; y++){
-    for(var x = 0; x < currentBlockWidth; x++){
-      if((y + currentY) >= ROWS){
+  for(var y = 0; y < this.currentBlock.height; y++){
+    for(var x = 0; x < this.currentBlock.width; x++){
+      if((y + this.currentY) >= this.board.height){
         return false;
       }
-      else if(currentY < 0){
-        if(y < (currentBlockHeight + currentY) )
-        this._table[y][x + currentX] = 1;
+      else if(this.currentY < 0){
+        if(y < (this.currentBlock.height + this.currentY) )
+          this.board._table[y][x + this.currentX] = 1;
       }
       else{
-        this._table[y + currentY][x + currentX] = 1;
+        this.board._table[y + this.currentY][x + this.currentX] = 1;
       }
     }
   }
-}
+};
 
-Board.prototype.check = function(){
-  var currentBlockHeight = blockPattern[progress].height;
+Game.prototype.check = function(){
   //セーフなエリアのTOP
   // console.log(currentY);
-  var currentTop = currentY;
+  var currentTop = this.currentY;
   //セーフなエリアのBOTTOM
   // console.log(currentY + currentBlockHeight);
-  var currentBottom = currentY + currentBlockHeight;
+  var currentBottom = this.currentY + this.currentBlock.height;
 
   //大小判定
   if(currentTop < 0){
     currentTop = 0;
   }
 
-  if(currentBottom >= ROWS){
-    currentBottom >= ROWS;
+  if(currentBottom >= this.height){
+    currentBottom = this.height;
   }
 
   // 成否判定
   // 最初の一回は判定外
-  if(progress === 0){
-    safeTop = currentTop;
-    safeBottom = currentBottom;
+  if(game.progress === 0){
+    this.safeTop = currentTop;
+    this.safeBottom = currentBottom;
   }
 
-  else if(progress === 9){
-    clear();
+  else if(game.progress === 9){
+    this.clear();
   }
 
   //2ブロック目以降
   else{
-    //セーフな高さと低さを設定
-    var safeArea = safeBottom - safeTop;
-    var currentArea = currentBottom - currentTop;
 
     //低まったらゲームオーバー
-    if(currentTop > safeBottom - 1 || currentBottom < safeTop){
+    if(currentTop > this.safeBottom - 1 || currentBottom < this.safeTop){
       console.log('currentTop ' + currentTop);
       console.log('currentBottom ' + currentBottom);
-      console.log('safeTop ' + safeTop );
-      console.log('safeBottom ' + safeBottom);
-      gameOver();
-      lose = true;
+      console.log('safeTop ' + this.safeTop );
+      console.log('safeBottom ' + this.safeBottom);
+      this.gameOver();
+      this.lose = true;
     }
     //新しいセーフエリアの設定
     else{
@@ -235,95 +146,178 @@ Board.prototype.check = function(){
       //消してから，落とす処理を加える
       console.log('currentTop ' + currentTop);
       console.log('currentBottom ' + currentBottom);
-      console.log('safeTop ' + safeTop );
-      console.log('safeBottom ' + safeBottom);
+      console.log('safeTop ' + this.safeTop );
+      console.log('safeBottom ' + this.safeBottom);
       //上にはみ出した分を消す
-      if(safeTop > currentTop){
-        var currentBlockWidth = blockPattern[progress].width;
-        for(var x = currentX; x < currentX + currentBlockWidth; x++){
-          for(var y = currentTop; y < safeTop; y++){
-            // this._table[y][x] = 0;
-            if(this._table[y][x] === 1){
-              this._table[y][x] = 0;
+      
+      if(this.safeTop > currentTop){
+        for(var x = this.currentX; x < this.currentX + this.currentBlock.width; x++){
+          for(var y = currentTop; y < this.safeTop; y++){
+            if(this.board._table[y][x] === 1){
+              this.board._table[y][x] = 0;
             }
           }
         }
       }
 
       //下にはみ出した分を消す
-      if(safeBottom < currentBottom){
-        var currentBlockWidth = blockPattern[progress].width;
-        for(var x = currentX; x < currentX + currentBlockWidth; x++){
-          for(var y = safeBottom; y < ROWS; y++){
-            if(this._table[y][x] === 1){
-              this._table[y][x] = 0;
+      if(this.safeBottom < currentBottom){
+        for(var x = this.currentX; x < this.currentX + this.currentBlock.width; x++){
+          for(var y = this.safeBottom; y < this.height; y++){
+            if(this.board._table[y][x] === 1){
+              this.board._table[y][x] = 0;
             }
           }
         }
       }
     }
 
-    safeTop = currentTop;
-    safeBottom = currentBottom;
+    this.safeTop = currentTop;
+    this.safeBottom = currentBottom;
 
   }
-}
+};
 
 //fadeout function
-Board.prototype.fadeOut = function(y, x){
+Game.prototype.fadeOut = function(y, x){
   console.log('fadeout');
-  var currentBlockWidth = blockPattern[progress].width;
-  for(var i = currentX; x < currentX + currentBlockWidth; x++){
-    for(var j = y; j < ROWS - 1; j++){
-      this._table[j][i] = 0;
-      this._table[j + 1][i] = 1;
+  for(var i = this.currentX; x < this.currentX + this.currentBlock.width; x++){
+    for(var j = y; j < this.height - 1; j++){
+      this.board._table[j][i] = 0;
+      this.board._table[j + 1][i] = 1;
     }
   }
-}
+};
 
-function gameOver() {
-  sound.play(SoundType.GameOver);
+// shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
+Game.prototype.newShape = function() {
+  var id = this.progress;
+  this.currentBlock = BlockPattern[id];
+
+  // パターンを操作ブロックへセットする
+  this.current = [];
+  for ( var y = 0; y < this.currentBlock.height; ++y ) {
+    this.current[ y ] = [];
+    for ( var x = 0; x < this.currentBlock.width; ++x ) {
+      this.current[ y ][ x ] = id + 1;
+    }
+  }
+  // ブロックを盤面の上のほうにセットする
+  if(id === 6 || id === 7){
+    this.currentX = this.progress + 3;
+  }
+  else if(id === 8){
+    this.currentX = this.progress + 4;
+  }
+  else if(id === 9){
+    this.currentX = this.progress + 6;
+  }
+  else{
+    this.currentX = this.progress;
+  }
+  this.currentY = 0;
+  console.log('currentX: '+this.currentX);
+};
+
+//画面の更新・ブロックの動きを司る関数
+Game.prototype.tick = function() {
+  //現在の高さ
+  var currentHeight = this.currentBlock.height;
+
+  //エスケープ処理
+  if(currentHeight <= 1){
+    currentHeight = 1;
+  }
+
+  //ブロックを下向きに動かす
+  if(this.tickFlg === 0 && this.currentY < 11){
+    console.log('flg-down: '+this.currentY);
+    ++this.currentY;
+    //SEを鳴らす
+    if(this.currentY === 11){
+      this.sound.play(SoundType.Reflect);
+      console.log('downer reflect');
+    }
+  }
+
+  //ブロックを上向きに動かす
+  else if(this.currentY < 0){
+    if(this.currentY <= 0 && this.minusFlg === 0){
+      console.log('up: '+this.currentY);
+      --this.currentY;
+      //エスケープ処理
+      if(this.currentY === -currentHeight){
+        console.log('upper reflect');
+        this.sound.play(SoundType.Reflect);
+        this.minusFlg = 1;
+      }
+    }
+
+    //上限に達したらブロックの進行方向を下向きにする
+    else if(this.currentY <= 0 && this.minusFlg === 1){
+      console.log('down: '+this.currentY);
+      this.currentY++;
+      if(this.currentY === 0){
+        console.log('reflect');
+        this.minusFlg = 0;
+        this.tickFlg = 0;
+        return false;
+      }
+    }
+  }
+
+  //ブロックを上向きに動かす
+  else {
+    console.log('up*: '+this.currentY);
+    --this.currentY;
+    this.tickFlg = 1;
+  }
+};
+
+Game.prototype.gameOver = function() {
+  this.sound.play(SoundType.GameOver);
   alert('game over');
-  progress = 12;
-  init();  // 盤面をまっさらにする
-}
+  this.progress = 12;
+  this.board.init();  // 盤面をまっさらにする
+};
 
-function clear(){
+Game.prototype.clear = function() {
   alert('clear');
-}
+};
 
-function go(){
+Game.prototype.go = function() {
+  
   //ブロック速度の加速
-  if(progress === 2){
-    speed = speed - 5;
+  if(this.progress === 2){
+    this.speed = this.speed - 5;
   }
 
-  else if(progress === 4){
-    speed = speed - 5;
+  else if(this.progress === 4){
+    this.speed = this.speed - 5;
   }
 
-  else if(progress === 5){
-    speed = speed - 5;
+  else if(this.progress === 5){
+    this.speed = this.speed - 5;
   }
 
-  else if(progress === 7){
-    speed = speed - 5;
+  else if(this.progress === 7){
+    this.speed = this.speed - 5;
   }
 
-  console.log(speed);
-  interval = setInterval(tick,speed);
-}
+  var self = this;
+  this.interval = setInterval(function(){self.tick()} ,self.speed);
+};
 
 //initialize
-function newGame() {
-  board = new Board();
-  clearInterval(interval);  // ゲームタイマーをクリア
-  board.init();  // 盤面をまっさらにする
-  newShape();  // 操作ブロックをセット
-  lose = false;  // 負けフラッグ
+Game.prototype.newGame = function() {
+  clearInterval(this.interval);  // ゲームタイマーをクリア
+  this.board.init();  // 盤面をまっさらにする
+  this.newShape();  // 操作ブロックをセット
+  this.lose = false;  // 負けフラッグ
   // interval = setInterval( tick, speed );  // 250ミリ秒ごとにtickという関数を呼び出す
   // interval = go();
-}
+};
 
-newGame();
-go();
+var game = new Game();
+game.newGame();
+game.go();
