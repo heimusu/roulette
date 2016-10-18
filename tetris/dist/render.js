@@ -43,7 +43,7 @@ function render() {
   for ( var y = 0; y < game.currentBlock.height; ++y ) {
     for ( var x = 0; x < game.currentBlock.width; ++x ) {
       ctx.fillStyle = COLOR;
-      drawBlock( game.currentX + x, game.currentY + y );  // マスを描画
+      drawBlock( game.current.x + x, game.current.y + y );  // マスを描画
     }
   }
 }
