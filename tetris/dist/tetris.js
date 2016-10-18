@@ -21,46 +21,22 @@ var safeBottom = ROWS;
 var speed = 110;
 var breakFlg = 0;
 
-
-//画像
-var src = "./img/ace.jpg";
-var img = new Image();
-img.src = src;
-
-var shapes = [
-  //縦10横1
-  [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0 ,1,0,0,0, 1,0,0,0, 1,0,0,0,
-  1,0,0,0, 1,0,0,0, 1,0,0,0 ],
-  //縦9横1
-  [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0 ,1,0,0,0, 1,0,0,0, 1,0,0,0,
-  1,0,0,0, 1,0,0,0],
-  //縦8横1
-  [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0 ,1,0,0,0, 1,0,0,0, 1,0,0,0,
-  1,0,0,0],
-  //縦7横1
-  [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0 ,1,0,0,0, 1,0,0,0, 1,0,0,0],
-  //縦6横1
-  [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0 ,1,0,0,0, 1,0,0,0],
-  //縦5横4
-  [1, 1, 1, 1, 1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1],
-  //縦4横1
-  [1, 0, 0, 0, 1,0,0,0, 1,0,0,0, 1,0,0,0],
-  //縦12横2
-  [1, 1, 0, 0, 1,1,0,0, 1,1,0,0, 1,1,0,0 ,1,1,0,0, 1,1,0,0, 1,1,0,0,
-  1,1,0,0, 1,1,0,0, 1,1,0,0, 1,1,0,0, 1,1,0,0],
-  //縦2横3
-  [1, 1, 1, 0, 1,1,1,0],
-  //縦1横1
-  [1,0]
-];
-
-var blockHeight = [10, 9, 8, 7, 6, 5, 4, 12, 2, 1];
-var blockWidth = [1, 1, 1, 1, 1, 4, 1, 2, 3, 1];
-
-// ブロックの色
-var colors = [
-    'cyan', 'orange', 'blue', 'yellow', 'red', 'green', 'purple'
-];
+var Block = function(_width, _height) {
+  this.width = _width;
+  this.height = _height;
+}
+var block = [
+  new Block(1,10),
+  new Block(1,9),
+  new Block(1,8),
+  new Block(1,7),
+  new Block(1,6),
+  new Block(4,5),
+  new Block(1,4),
+  new Block(2,12),
+  new Block(3,2),
+  new Block(1,1)
+]
 
 // 盤面を空にする
 function init() {
@@ -72,25 +48,17 @@ function init() {
   }
 }
 
-
 // shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
 function newShape() {
-  // var id = Math.floor( Math.random() * shapes.length );  // ランダムにインデックスを出す
   var id = progress;
-  var shape = shapes[ id ];
-  var currentHeight = (shapes[id].length) / 4;
+  var currentBlock = block[id];
+
   // パターンを操作ブロックへセットする
   current = [];
-  for ( var y = 0; y < currentHeight; ++y ) {
+  for ( var y = 0; y < currentBlock.height; ++y ) {
     current[ y ] = [];
-    for ( var x = 0; x < 4; ++x ) {
-      var i = 4 * y + x;
-      if ( typeof shape[ i ] != 'undefined' && shape[ i ] ) {
-        current[ y ][ x ] = id + 1;
-      }
-      else {
-        current[ y ][ x ] = 0;
-      }
+    for ( var x = 0; x < currentBlock.width; ++x ) {
+      current[ y ][ x ] = id + 1;
     }
   }
   // ブロックを盤面の上のほうにセットする
@@ -107,13 +75,12 @@ function newShape() {
     currentX = progress;
   }
   currentY = 0;
-
 }
 
 //画面の更新・ブロックの動きを司る関数
 function tick() {
   //現在の高さ
-  var currentHeight = (shapes[progress].length) / 4;
+  var currentHeight = block[progress].height;
 
   //エスケープ処理
   if(currentHeight <= 1){
@@ -208,8 +175,8 @@ function valid( offsetX, offsetY, newCurrent ) {
 function freeze(){
   // console.log(currentY);
   //現在のブロックのパラメータ
-  var currentBlockHeight = blockHeight[progress];
-  var currentBlockWidth = blockWidth[progress];
+  var currentBlockHeight = block[progress].height;
+  var currentBlockWidth = block[progress].width;
 
   //ブロックの描画
   for(var y = 0; y < currentBlockHeight; y++){
@@ -229,7 +196,7 @@ function freeze(){
 }
 
 function check(){
-  var currentBlockHeight = blockHeight[progress];
+  var currentBlockHeight = block[progress].height;
   //セーフなエリアのTOP
   // console.log(currentY);
   var currentTop = currentY;
@@ -284,7 +251,7 @@ function check(){
       console.log('safeBottom ' + safeBottom);
       //上にはみ出した分を消す
       if(safeTop > currentTop){
-        var currentBlockWidth = blockWidth[progress];
+        var currentBlockWidth = block[progress].width;
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = currentTop; y < safeTop; y++){
             // board[y][x] = 0;
@@ -297,7 +264,7 @@ function check(){
 
       //下にはみ出した分を消す
       if(safeBottom < currentBottom){
-        var currentBlockWidth = blockWidth[progress];
+        var currentBlockWidth = block[progress].width;
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = safeBottom; y < ROWS; y++){
             if(board[y][x] === 1){
@@ -317,7 +284,7 @@ function check(){
 //fadeout function
 function fadeOut(y, x){
   console.log('fadeout');
-  var currentBlockWidth = blockWidth[progress];
+  var currentBlockWidth = block[progress].width;
   for(var i = currentX; x < currentX + currentBlockWidth; x++){
     for(var j = y; j < ROWS - 1; j++){
       board[j][i] = 0;

@@ -8,6 +8,12 @@ var ctx = canvas.getContext( '2d' ); // コンテクスト
 var W = 1200, H = 800;  // キャンバスのサイズ
 // var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;  // マスの幅を設定
 var BLOCK_W = W / COLS, BLOCK_H = W / COLS;  // マスの幅を設定
+var COLOR = '#000';
+
+//画像
+var src = "./img/ace.jpg";
+var img = new Image();
+img.src = src;
 
 // x, yの部分へマスを描画する処理
 function drawBlock( x, y ) {
@@ -22,13 +28,13 @@ function render() {
   ctx.clearRect( 0, 0, W, H );  // 一度キャンバスを真っさらにする
   ctx.strokeStyle = 'black';  // えんぴつの色を黒にする
 
-  var currentHeight = (shapes[progress].length) / 4;
+  var currentHeight = block[progress].height;
 
   // 盤面を描画する
   for ( var x = 0; x < COLS; ++x ) {
     for ( var y = 0; y < ROWS; ++y ) {
       if ( board[ y ][ x ] ) {  // マスが空、つまり0ではなかったら
-        ctx.fillStyle = colors[ board[ y ][ x ] - 1 ];  // マスの種類に合わせて塗りつぶす色を設定
+        ctx.fillStyle = COLOR;
         drawBlock( x, y );  // マスを描画
       }
     }
@@ -38,7 +44,7 @@ function render() {
   for ( var y = 0; y < currentHeight; ++y ) {
     for ( var x = 0; x < 10; ++x ) {
       if ( current[ y ][ x ] ) {
-        ctx.fillStyle = colors[ current[ y ][ x ] - 1 ];  // マスの種類に合わせて塗りつぶす色を設定
+        ctx.fillStyle = COLOR;
         drawBlock( currentX + x, currentY + y );  // マスを描画
       }
     }
