@@ -54,8 +54,8 @@ var Game = function() {
 };
 
 Game.prototype.freeze = function(){
-  for(var y = 0; y < this.currentBlock.height; y++){
-    for(var x = 0; x < this.currentBlock.width; x++){
+  for(var y = 0; y < this.currentBlock.height; ++y){
+    for(var x = 0; x < this.currentBlock.width; ++x){
       if((y + this.current.y) >= this.board.height){
         return false;
       }
@@ -117,8 +117,8 @@ Game.prototype.check = function(){
       //上にはみ出した分を消す
 
       if(this.safeTop > currentTop){
-        for(var x = this.current.x; x < this.current.x + this.currentBlock.width; x++){
-          for(var y = currentTop; y < this.safeTop; y++){
+        for(var x = this.current.x; x < this.current.x + this.currentBlock.width; ++x){
+          for(var y = currentTop; y < this.safeTop; ++y){
             if(this.board._table[y][x] === 1){
               this.board._table[y][x] = 0;
             }
@@ -128,8 +128,8 @@ Game.prototype.check = function(){
 
       //下にはみ出した分を消す
       if(this.safeBottom < currentBottom){
-        for(var x = this.current.x; x < this.current.x + this.currentBlock.width; x++){
-          for(var y = this.safeBottom; y < this.height; y++){
+        for(var x = this.current.x; x < this.current.x + this.currentBlock.width; ++x){
+          for(var y = this.safeBottom; y < this.height; ++y){
             if(this.board._table[y][x] === 1){
               this.board._table[y][x] = 0;
             }
@@ -188,7 +188,7 @@ Game.prototype.tick = function() {
     }
     //上限に達したらブロックの進行方向を下向きにする
     else if(this.current.y <= 0 && this.minusFlg === 1){
-      this.current.y++;
+      ++this.current.y;
       if(this.current.y === 0){
         this.minusFlg = 0;
         this.tickFlg = 0;
@@ -235,11 +235,11 @@ Game.prototype.select = function() {
     this.sound.play(SoundType.Select);
     this.freeze();
     this.check();
-    this.progress++;
+    ++this.progress;
     this.tickFlg = 0;
     this.breakFlg = 1;
   }
-  else if(game.breakFlg ===1 ){
+  else if(game.breakFlg === 1){
     this.breakFlg = 0;
     this.newShape();
     this.go();
