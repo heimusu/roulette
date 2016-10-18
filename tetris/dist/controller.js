@@ -19,20 +19,7 @@ document.body.onkeydown = function( e ) {
 function keyPress( key ) {
   switch ( key ) {
   case 'enter':
-    if(game.breakFlg === 0){
-      game.sound.play(SoundType.Select);
-      game.freeze();
-      game.check();
-      game.progress++;
-      game.tickFlg = 0;
-      clearInterval(game.interval);
-      game.breakFlg = 1;
-    }
-    else if(game.breakFlg ===1 ){
-      game.breakFlg = 0;
-      game.newShape();
-      game.go();
-    }
+    game.select();
     break;
   }
 }

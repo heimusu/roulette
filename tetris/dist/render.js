@@ -42,10 +42,8 @@ function render() {
   // 操作ブロックを描画する
   for ( var y = 0; y < game.currentBlock.height; ++y ) {
     for ( var x = 0; x < game.currentBlock.width; ++x ) {
-      if ( game.current[ y ][ x ] ) {
-        ctx.fillStyle = COLOR;
-        drawBlock( game.currentX + x, game.currentY + y );  // マスを描画
-      }
+      ctx.fillStyle = COLOR;
+      drawBlock( game.currentX + x, game.currentY + y );  // マスを描画
     }
   }
 }
