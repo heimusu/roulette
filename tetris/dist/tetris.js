@@ -128,9 +128,9 @@ function tick() {
   if(tickFlg === 0 && currentY < 11){
     currentY++;
     //SEを鳴らす
-    if(currentY === 11){
-      se1();
-    }
+    // if(currentY === 11){
+    //   se1();
+    // }
   }
 
   //ブロックを上向きに動かす
@@ -139,7 +139,7 @@ function tick() {
       --currentY;
       //エスケープ処理
       if(currentY === -currentHeight){
-        se1();
+        // se1();
         minusFlg = 1;
       }
     }
@@ -236,7 +236,7 @@ function freeze(){
     }
   }
   //timerでtick的な関数
-  flash = setInterval(tick2,speed);
+  // flash = setInterval(tick2,speed);
 }
 
 function tick2(){
@@ -253,9 +253,9 @@ function tick2(){
   if(tickFlg === 0 && currentY < 11){
     currentY++;
     //SEを鳴らす
-    if(currentY === 11){
-      se1();
-    }
+    // if(currentY === 11){
+    //   se1();
+    // }
   }
 
   //ブロックを上向きに動かす
@@ -415,6 +415,24 @@ function se3(){
   init();  // 盤面をまっさらにする
 }
 
+//bgm再生
+function startBgm(){
+  document.getElementById('bgm').play();
+}
+
+//移動音再生
+function moveBgm(){
+  document.getElementById('move').play();
+}
+
+function stopBgm(){
+  document.getElementById('bgm').pause();
+  document.getElementById('bgm').currentTime = 0;
+  document.getElementById('move').pause();
+  document.getElementById('move').currentTime = 0;
+}
+
+
 function clear(){
   alert('clear');
 }
@@ -447,21 +465,23 @@ function clearLines() {
 
 
 function go(){
+  startBgm();
+  moveBgm();
   //ブロック速度の加速
   if(progress === 2){
-    speed = speed - 5;
+    speed = speed - 2;
   }
 
   else if(progress === 4){
-    speed = speed - 5;
+    speed = speed - 2;
   }
 
   else if(progress === 5){
-    speed = speed - 5;
+    speed = speed - 2;
   }
 
   else if(progress === 7){
-    speed = speed - 5;
+    speed = speed - 2;
   }
 
   console.log(speed);

@@ -50,6 +50,7 @@ function keyPress( key ) {
 
     if(breakFlg === 0){
       se2();
+      stopBgm();
       clearInterval(interval);
       freeze();
       check();
