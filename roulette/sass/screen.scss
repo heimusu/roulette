@@ -1,0 +1,39 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+
+$unit: 10px;
+body {
+  background-color: #993600;
+}
+
+#roulette-container {
+  margin: 10 * $unit 0 0 25.5 * $unit;
+  width: 48 * $unit;
+  height: 100 / 16 * 9 * $unit;
+  font-size: 0;
+  overflow: hidden;
+#roulette-inner {
+  div.symbol {
+    background-color: #fff;
+    border: solid 0.5 * $unit #000;
+    width: 46 * $unit;
+    height: 4.0 * $unit;
+    text-align: center;
+    font-size: 3.0 * $unit;
+  }
+}
+}
+#pick {
+  position: absolute;
+  top: 25.0 * $unit;
+  left: 25.5 * $unit;
+  border: solid 0.5 * $unit rgba(255,255,255,0.5);
+  background-color: rgba(255,0,0,0.5);
+  width: 46 * $unit;
+  height: 4.0 * $unit;
+  text-align: center;
+}

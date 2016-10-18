@@ -5,6 +5,7 @@ var COLS = 16, ROWS = 12;  // 横10、縦20マス
 var board = [];  // 盤面情報
 var lose;  // 一番上までいっちゃったかどうか
 var interval;  // ゲームを実行するタイマーを保持する変数
+var flash;
 var current; // 今操作しているブロックの形
 var currentX, currentY; // 今操作しているブロックの位置
 
@@ -18,7 +19,7 @@ var safeTop = 0;
 var safeBottom = ROWS;
 
 //速度ロジック
-var speed = 110;
+var speed = 50;
 var breakFlg = 0;
 
 
@@ -234,7 +235,66 @@ function freeze(){
       }
     }
   }
+  //timerでtick的な関数
+  flash = setInterval(tick2,speed);
 }
+
+function tick2(){
+  //現在の高さ
+  var currentHeight = (shapes[progress].length) / 4;
+
+  //エスケープ処理
+  if(currentHeight <= 1){
+    currentHeight = 1;
+  }
+
+
+  //ブロックを下向きに動かす
+  if(tickFlg === 0 && currentY < 11){
+    currentY++;
+    //SEを鳴らす
+    if(currentY === 11){
+      se1();
+    }
+  }
+
+  //ブロックを上向きに動かす
+  else if(currentY < 0){
+    if(currentY <= 0 && minusFlg === 0){
+      --currentY;
+      //エスケープ処理
+      if(currentY === -currentHeight){
+        se1();
+        minusFlg = 1;
+      }
+    }
+
+    //上限に達したらブロックの進行方向を下向きにする
+    else if(currentY <= 0 && minusFlg === 1){
+      currentY++;
+      if(currentY === 0){
+        minusFlg = 0;
+        tickFlg = 0;
+        // return false;
+      }
+    }
+  }
+
+  else if(progress === 9 && currentY === 0){
+    currentY = -1;
+    minusFlg = 0;
+    tickFlg = 0;
+  }
+
+  //ブロックを上向きに動かす
+  else {
+    --currentY;
+    tickFlg = 1;
+  }
+}
+
+
+
 
 function check(){
   var currentBlockHeight = blockHeight[progress];
@@ -310,7 +370,7 @@ function check(){
             if(board[y][x] === 1){
               // board[y][x] = 0;
               // setInterval(fadeOut(y, x), 50);
-              // fadeOut(y,x);
+              fadeOut(y,x);
             }
           }
         }
