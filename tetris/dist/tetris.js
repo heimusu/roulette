@@ -81,8 +81,6 @@ Game.prototype.valid = function ( offsetX, offsetY, newCurrent ) {
 };
 
 Game.prototype.freeze = function(){
-
-  //ブロックの描画
   for(var y = 0; y < this.currentBlock.height; y++){
     for(var x = 0; x < this.currentBlock.width; x++){
       if((y + this.currentY) >= this.board.height){
@@ -174,24 +172,18 @@ Game.prototype.check = function(){
 
     this.safeTop = currentTop;
     this.safeBottom = currentBottom;
-
   }
 };
 
-//fadeout function
-Game.prototype.fadeOut = function(y, x){
-  console.log('fadeout');
-  for(var i = this.currentX; x < this.currentX + this.currentBlock.width; x++){
-    for(var j = y; j < this.height - 1; j++){
-      this.board._table[j][i] = 0;
-      this.board._table[j + 1][i] = 1;
-    }
-  }
-};
-
-// shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
 Game.prototype.newShape = function() {
   var id = this.progress;
+  if (this.currentBlock != null) {
+    this.currentX += this.currentBlock.width;
+  }
+  else {
+    this.currentX = 0;
+  }
+
   this.currentBlock = BlockPattern[id];
 
   // パターンを操作ブロックへセットする
@@ -202,19 +194,7 @@ Game.prototype.newShape = function() {
       this.current[ y ][ x ] = id + 1;
     }
   }
-  // ブロックを盤面の上のほうにセットする
-  if(id === 6 || id === 7){
-    this.currentX = this.progress + 3;
-  }
-  else if(id === 8){
-    this.currentX = this.progress + 4;
-  }
-  else if(id === 9){
-    this.currentX = this.progress + 6;
-  }
-  else{
-    this.currentX = this.progress;
-  }
+
   this.currentY = 0;
   console.log('currentX: '+this.currentX);
 };

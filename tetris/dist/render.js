@@ -44,7 +44,6 @@ function render() {
     for ( var x = 0; x < game.currentBlock.width; ++x ) {
       if ( game.current[ y ][ x ] ) {
         ctx.fillStyle = COLOR;
-        console.log(game.current);
         drawBlock( game.currentX + x, game.currentY + y );  // マスを描画
       }
     }
