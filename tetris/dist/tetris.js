@@ -289,8 +289,25 @@ Game.prototype.newGame = function() {
   this.lose = false;  // 負けフラッグ
   // interval = setInterval( tick, speed );  // 250ミリ秒ごとにtickという関数を呼び出す
   // interval = go();
+  this.go();
 };
+
+Game.prototype.select = function() {
+  if(game.breakFlg === 0){
+    this.sound.play(SoundType.Select);
+    this.freeze();
+    this.check();
+    this.progress++;
+    this.tickFlg = 0;
+    clearInterval(game.interval);
+    this.breakFlg = 1;
+  }
+  else if(game.breakFlg ===1 ){
+    this.breakFlg = 0;
+    this.newShape();
+    this.go();
+  }
+}
 
 var game = new Game();
 game.newGame();
-game.go();

@@ -4,10 +4,6 @@
 document.body.onkeydown = function( e ) {
   // キーに名前をセットする
   var keys = {
-    37: 'left',
-    39: 'right',
-    40: 'down',
-    38: 'rotate',
     13: 'enter'
   };
 
@@ -22,24 +18,6 @@ document.body.onkeydown = function( e ) {
 // キーボードが押された時に呼び出される関数
 function keyPress( key ) {
   switch ( key ) {
-  case 'left':
-    console.log('input left');
-    if ( game.valid( -1 ) ) {
-      --game.currentX;  // 左に一つずらす
-    }
-    break;
-  case 'right':
-    console.log('input right');
-    if ( game.valid( 1 ) ) {
-      ++game.currentX;  // 右に一つずらす
-    }
-    break;
-  case 'down':
-    console.log('input down');
-    if ( game.valid( 0, 1 ) ) {
-      ++game.currentY;  // 下に一つずらす
-    }
-    break;
   case 'enter':
     if(game.breakFlg === 0){
       game.sound.play(SoundType.Select);
