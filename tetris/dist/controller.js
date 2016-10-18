@@ -46,7 +46,7 @@ function keyPress( key ) {
     break;
   case 'enter':
     if(breakFlg === 0){
-      se2();
+      sound.play(SoundType.Select);
       board.freeze();
       board.check();
       progress++;

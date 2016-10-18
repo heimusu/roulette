@@ -28,8 +28,8 @@ function render() {
   ctx.clearRect( 0, 0, W, H );  // 一度キャンバスを真っさらにする
   ctx.strokeStyle = 'black';  // えんぴつの色を黒にする
 
-  var currentHeight = block[progress].height;
-  var currentWidth = block[progress].width;
+  var currentHeight = blockPattern[progress].height;
+  var currentWidth = blockPattern[progress].width;
 
   // 盤面を描画する
   for ( var x = 0; x < COLS; ++x ) {
@@ -41,7 +41,6 @@ function render() {
     }
   }
 
-  console.log(current);
   // 操作ブロックを描画する
   for ( var y = 0; y < currentHeight; ++y ) {
     for ( var x = 0; x < currentWidth; ++x ) {

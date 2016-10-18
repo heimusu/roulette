@@ -7,6 +7,7 @@ var lose;  // 一番上までいっちゃったかどうか
 var interval;  // ゲームを実行するタイマーを保持する変数
 var current; // 今操作しているブロックの形
 var currentX, currentY; // 今操作しているブロックの位置
+var sound = new Sound();
 
 var progress = 0;
 var tickFlg = 0;
@@ -95,7 +96,7 @@ function tick() {
     currentY++;
     //SEを鳴らす
     if(currentY === 11){
-      se1();
+      sound.play(SoundType.Reflect);
     }
   }
 
@@ -105,7 +106,7 @@ function tick() {
       --currentY;
       //エスケープ処理
       if(currentY === -currentHeight){
-        se1();
+        sound.play(SoundType.Reflect);
         minusFlg = 1;
       }
     }
@@ -280,23 +281,8 @@ Board.prototype.fadeOut = function(y, x){
   }
 }
 
-// reflect 音
-function se1(){
-  document.getElementById( 'se1' ).play() ;
-}
-
-// enter 音
-function se2(){
-  document.getElementById( 'se2' ).play() ;
-}
-
-// gameover 音
-function se3(){
-  document.getElementById( 'se3' ).play() ;
-}
-
 function gameOver() {
-  se3();
+  sound.play(SoundType.GameOver);
   alert('game over');
   progress = 12;
   init();  // 盤面をまっさらにする
