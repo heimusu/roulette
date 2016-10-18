@@ -213,6 +213,8 @@ function freeze(){
   var currentBlockHeight = blockHeight[progress];
   var currentBlockWidth = blockWidth[progress];
 
+
+
   //ブロックの描画
   for(var y = 0; y < currentBlockHeight; y++){
     for(var x = 0; x < currentBlockWidth; x++){
@@ -305,7 +307,7 @@ function check(){
             if(board[y][x] === 1){
               // board[y][x] = 0;
               // setInterval(fadeOut(y, x), 50);
-              fadeOut(y,x);
+              // fadeOut(y,x);
             }
           }
         }

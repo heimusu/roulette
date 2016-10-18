@@ -5,9 +5,19 @@ var canvas = document.getElementsByTagName( 'canvas' )[ 0 ];  // キャンバス
 var ctx = canvas.getContext( '2d' ); // コンテクスト
 // var W = 300, H = 600;  // キャンバスのサイズ
 //新キャンバスサイズ
-var W = 1200, H = 800;  // キャンバスのサイズ
+// var W = 600, H = 800;  // キャンバスのサイズ
+var W = window.parent.screen.width;
+var H = window.parent.screen.height;
+
 // var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;  // マスの幅を設定
 var BLOCK_W = W / COLS, BLOCK_H = W / COLS;  // マスの幅を設定
+document.getElementsByTagName('canvas')[0].width = 2560;
+document.getElementsByTagName('canvas')[0].height = 1440;
+console.log(document.getElementsByTagName('canvas')[0].width);
+console.log(document.getElementsByTagName('canvas')[0].height);
+console.log( window.parent.screen.width );
+console.log( window.parent.screen.height );
+
 
 // x, yの部分へマスを描画する処理
 function drawBlock( x, y ) {
