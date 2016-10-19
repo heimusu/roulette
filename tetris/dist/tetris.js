@@ -76,10 +76,27 @@ var Game = function() {
   this.current = new Point(-1, -1);
   this.board = new Board();
   this.sound = new Sound();
+  this.fallingBlocks = [];
 };
 
 Game.prototype.freeze = function(){
-  return this.board.freeze(this.current, this.currentBlock);
+  var isFreeze = this.board.freeze(this.current, this.currentBlock);
+
+  var width = this.currentBlock.width;
+
+  var topFallingBlockHeight = this.board.safeTop - this.current.y;
+  var bottomFallingBlockHeight = (this.current.y + this.currentBlock.height) - this.board.safeBottom;
+
+  if (topFallingBlockHeight > 0) {
+    block = new Block(width, topFallingBlockHeight);
+    this.fallingBlocks.push(new Current(this.current, block));
+  }
+  if (bottomFallingBlockHeight > 0) {
+    block = new Block(width, bottomFallingBlockHeight);
+    this.fallingBlocks.push(new Current(new Point(this.current.x, this.current.y + this.currentBlock.height), block));
+  }
+
+  return isFreeze;
 };
 
 Game.prototype.newShape = function() {
@@ -164,6 +181,7 @@ Game.prototype.go = function() {
 Game.prototype.newGame = function() {
   clearInterval(this.interval);  // ゲームタイマーをクリア
   this.board.init();  // 盤面をまっさらにする
+  this.fallingBlocks = [];
   this.newShape();  // 操作ブロックをセット
   this.lose = false;  // 負けフラッグ
   this.go();

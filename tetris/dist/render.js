@@ -27,6 +27,13 @@ function drawBlock( x, y ) {
   ctx.drawImage(img, BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1);
 }
 
+function drawFallingBlocks(current) {
+  for ( var y = 0; y < current.block.height; ++y ) {
+    for ( var x = 0; x < current.block.width; ++x ) {
+      drawBlock(current.position.x + x, current.position.y + y );  // マスを描画
+    }
+  }
+}
 
 // 盤面と操作ブロックを描画する
 function render() {
@@ -37,7 +44,6 @@ function render() {
   for ( var x = 0; x < game.board.width; ++x ) {
     for ( var y = 0; y < game.board.height; ++y ) {
       if ( game.board._table[ y ][ x ] ) {  // マスが空、つまり0ではなかったら
-        ctx.fillStyle = COLOR;
         drawBlock( x, y );  // マスを描画
       }
     }
@@ -46,10 +52,14 @@ function render() {
   // 操作ブロックを描画する
   for ( var y = 0; y < game.currentBlock.height; ++y ) {
     for ( var x = 0; x < game.currentBlock.width; ++x ) {
-      ctx.fillStyle = COLOR;
       drawBlock( game.current.x + x, game.current.y + y );  // マスを描画
     }
   }
+
+  /*
+  for(var current of game.fallingBlocks) {
+    drawFallingBlocks(current);
+  }*/
 }
 
 // 30ミリ秒ごとに状態を描画する関数を呼び出す
