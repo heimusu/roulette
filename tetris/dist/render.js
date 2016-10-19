@@ -5,14 +5,18 @@ var canvas = document.getElementsByTagName( 'canvas' )[ 0 ];  // キャンバス
 var ctx = canvas.getContext( '2d' ); // コンテクスト
 // var W = 300, H = 600;  // キャンバスのサイズ
 //新キャンバスサイズ
-var W = 1200, H = 800;  // キャンバスのサイズ
-// var BLOCK_W = W / COLS, BLOCK_H = H / ROWS;  // マスの幅を設定
+var W = window.parent.screen.width;
+var H = window.parent.screen.height;  // キャンバスのサイズ
+
 var BLOCK_W = W / game.board.width;
 BLOCK_H = H / game.board.height;  // マスの幅を設定
 var COLOR = '#000';
 
+document.getElementsByTagName('canvas')[0].width = window.parent.screen.width;
+document.getElementsByTagName('canvas')[0].height = window.parent.screen.height;
+
 //画像
-var src = "./img/ace.jpg";
+var src = "./img/sampleBlock.jpg";
 var img = new Image();
 img.src = src;
 

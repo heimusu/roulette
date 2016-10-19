@@ -4,7 +4,8 @@
 document.body.onkeydown = function( e ) {
   // キーに名前をセットする
   var keys = {
-    13: 'enter'
+    13: 'enter',
+    81: 'q'
   };
 
   if ( typeof keys[ e.keyCode ] != 'undefined' ) {
@@ -20,6 +21,10 @@ function keyPress( key ) {
   switch ( key ) {
   case 'enter':
     game.select();
+    break;
+  case 'q':
+    // $('img').css('display', 'none');
+    $('img').fadeOut();
     break;
   }
 }

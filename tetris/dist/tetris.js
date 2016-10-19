@@ -8,6 +8,11 @@ var Block = function(_width, _height) {
   this.height = _height;
 };
 
+var Current = function(position, block) {
+  this.position = position;
+  this.block = block;
+}
+
 var BlockPattern = [
   new Block(1,10),
   new Block(1,9),
@@ -22,7 +27,7 @@ var BlockPattern = [
 ];
 
 var MaxProgress = BlockPattern.length - 1;
-var SpeedTable = [110, 110, 105, 105, 100, 95, 95, 90, 90, 90, 90];
+var SpeedTable = [50, 50, 48, 48, 48, 46, 46, 44, 44, 44, 44];
 
 var Board = function() {
   this._table = [];
@@ -39,6 +44,23 @@ Board.prototype.init = function() {
   }
 };
 
+Board.prototype.freeze = function(pos, block) {
+  for(var y = 0; y < block.height; ++y){
+    for(var x = 0; x < block.width; ++x){
+      if((y + pos.y) >= this.height){
+        return false;
+      }
+      else if(pos.y < 0){
+        if(y < (block.height + pos.y) )
+          this._table[y][x + pos.x] = 1;
+      }
+      else{
+        this._table[y + pos.y][x + pos.x] = 1;
+      }
+    }
+  }
+}
+
 var Game = function() {
   this.lose = null;  // 一番上までいっちゃったかどうか
   this.interval = null;  // ゲームを実行するタイマーを保持する変数
@@ -54,20 +76,7 @@ var Game = function() {
 };
 
 Game.prototype.freeze = function(){
-  for(var y = 0; y < this.currentBlock.height; ++y){
-    for(var x = 0; x < this.currentBlock.width; ++x){
-      if((y + this.current.y) >= this.board.height){
-        return false;
-      }
-      else if(this.current.y < 0){
-        if(y < (this.currentBlock.height + this.current.y) )
-          this.board._table[y][x + this.current.x] = 1;
-      }
-      else{
-        this.board._table[y + this.current.y][x + this.current.x] = 1;
-      }
-    }
-  }
+  this.board.freeze(this.current, this.currentBlock);
 };
 
 Game.prototype.check = function(){
@@ -144,7 +153,6 @@ Game.prototype.check = function(){
 };
 
 Game.prototype.newShape = function() {
-  var id = this.progress;
   if (this.currentBlock != null) {
     // ブロック配置後: 配置前のブロックの横幅を加算
     this.current.x += this.currentBlock.width;
@@ -155,7 +163,7 @@ Game.prototype.newShape = function() {
   }
   this.current.y = 0;
 
-  this.currentBlock = BlockPattern[id];
+  this.currentBlock = BlockPattern[this.progress];
 };
 
 //画面の更新・ブロックの動きを司る関数
@@ -216,6 +224,8 @@ Game.prototype.clear = function() {
 
 Game.prototype.go = function() {
   var speed = SpeedTable[this.progress];
+  this.sound.play(SoundType.Bgm);
+  this.sound.play(SoundType.Move);
   var self = this;
   this.interval = setInterval(function(){self.tick()} , speed);
 };
@@ -231,15 +241,29 @@ Game.prototype.newGame = function() {
 
 Game.prototype.select = function() {
   if(game.breakFlg === 0){
-    clearInterval(game.interval);
+    clearInterval(this.interval);
     this.sound.play(SoundType.Select);
+    this.sound.stop(SoundType.Bgm);
+    this.sound.stop(SoundType.Move);
     this.freeze();
     this.check();
-    ++this.progress;
+    if (this.progress === 2) {
+      $('#img1').fadeIn('slow');
+    }
+    else if (this.progress === 5) {
+      $('#img2').fadeIn('slow');
+    }
+    else if (this.progress === 9) {
+
+      $('#img3').fadeIn('slow');
+    }
+   
+  ++this.progress;
     this.tickFlg = 0;
     this.breakFlg = 1;
   }
   else if(game.breakFlg === 1){
+    clearInterval(this.flash);
     this.breakFlg = 0;
     this.newShape();
     this.go();
