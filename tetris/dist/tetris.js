@@ -42,23 +42,28 @@ Board.prototype.init = function() {
       this._table[ y ][ x ] = 0;
     }
   }
+  this.safeTop = 0;
+  this.safeBottom = this.height;
 };
 
 Board.prototype.freeze = function(pos, block) {
-  for(var y = 0; y < block.height; ++y){
-    for(var x = 0; x < block.width; ++x){
-      if((y + pos.y) >= this.height){
-        return false;
+  for(var x = 0; x < block.width; ++x){
+    for(var y = 0; y < block.height; ++y){
+      if (y + pos.y < this.safeTop) {
+        continue;
       }
-      else if(pos.y < 0){
-        if(y < (block.height + pos.y) )
-          this._table[y][x + pos.x] = 1;
+      if (y + pos.y >= this.safeBottom) {
+        break;
       }
-      else{
-        this._table[y + pos.y][x + pos.x] = 1;
-      }
+      this._table[y + pos.y][x + pos.x] = 1;
     }
   }
+  this.safeTop = Math.max(pos.y, this.safeTop);
+  this.safeBottom = Math.min(pos.y + block.height, this.safeBottom);
+  console.log("safeTop: " + this.safeTop );
+  console.log("safeBottom: " + this.safeBottom );
+
+  return this.safeTop <= this.safeBottom;
 }
 
 var Game = function() {
@@ -71,85 +76,10 @@ var Game = function() {
   this.current = new Point(-1, -1);
   this.board = new Board();
   this.sound = new Sound();
-  this.safeTop = 0;
-  this.safeBottom = this.board.height;
 };
 
 Game.prototype.freeze = function(){
-  this.board.freeze(this.current, this.currentBlock);
-};
-
-Game.prototype.check = function(){
-  //セーフなエリアのTOP
-  var currentTop = this.current.y;
-  //セーフなエリアのBOTTOM
-  var currentBottom = this.current.y + this.currentBlock.height;
-
-  //大小判定
-  if(currentTop < 0){
-    currentTop = 0;
-  }
-
-  if(currentBottom >= this.height){
-    currentBottom = this.height;
-  }
-
-  // 成否判定
-  // 最初の一回は判定外
-  if(this.progress === 0){
-    this.safeTop = currentTop;
-    this.safeBottom = currentBottom;
-  }
-  else if(this.progress === MaxProgress){
-    this.clear();
-  }
-  //2ブロック目以降
-  else{
-    //低まったらゲームオーバー
-    if(currentTop > this.safeBottom - 1 || currentBottom < this.safeTop){
-      console.log('currentTop ' + currentTop);
-      console.log('currentBottom ' + currentBottom);
-      console.log('safeTop ' + this.safeTop );
-      console.log('safeBottom ' + this.safeBottom);
-      this.gameOver();
-      this.lose = true;
-    }
-    //新しいセーフエリアの設定
-    else{
-      //WIP
-      //上下ともに，ハミ出したブロックは消す
-      //消してから，落とす処理を加える
-      console.log('currentTop ' + currentTop);
-      console.log('currentBottom ' + currentBottom);
-      console.log('safeTop ' + this.safeTop );
-      console.log('safeBottom ' + this.safeBottom);
-      //上にはみ出した分を消す
-
-      if(this.safeTop > currentTop){
-        for(var x = this.current.x; x < this.current.x + this.currentBlock.width; ++x){
-          for(var y = currentTop; y < this.safeTop; ++y){
-            if(this.board._table[y][x] === 1){
-              this.board._table[y][x] = 0;
-            }
-          }
-        }
-      }
-
-      //下にはみ出した分を消す
-      if(this.safeBottom < currentBottom){
-        for(var x = this.current.x; x < this.current.x + this.currentBlock.width; ++x){
-          for(var y = this.safeBottom; y < this.height; ++y){
-            if(this.board._table[y][x] === 1){
-              this.board._table[y][x] = 0;
-            }
-          }
-        }
-      }
-    }
-
-    this.safeTop = currentTop;
-    this.safeBottom = currentBottom;
-  }
+  return this.board.freeze(this.current, this.currentBlock);
 };
 
 Game.prototype.newShape = function() {
@@ -245,8 +175,16 @@ Game.prototype.select = function() {
     this.sound.play(SoundType.Select);
     this.sound.stop(SoundType.Bgm);
     this.sound.stop(SoundType.Move);
-    this.freeze();
-    this.check();
+    if (this.freeze()) {
+      if (this.progress == MaxProgress) {
+        this.clear();
+      }
+    }
+    else {
+      this.gameOver();
+      this.lose = true;
+    }
+
     if (this.progress === 2) {
       $('#img1').fadeIn('slow');
     }
@@ -254,16 +192,14 @@ Game.prototype.select = function() {
       $('#img2').fadeIn('slow');
     }
     else if (this.progress === 9) {
-
       $('#img3').fadeIn('slow');
     }
-   
-  ++this.progress;
+
+    ++this.progress;
     this.tickFlg = 0;
     this.breakFlg = 1;
   }
   else if(game.breakFlg === 1){
-    clearInterval(this.flash);
     this.breakFlg = 0;
     this.newShape();
     this.go();
