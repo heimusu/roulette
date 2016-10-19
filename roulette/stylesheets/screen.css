@@ -109,5 +109,6 @@ body {
 .wrapper{
   width: 1000px;
   margin: 0 auto;
+  margin-top:200px;
   text-align: left;
 }
