@@ -24,7 +24,7 @@ var breakFlg = 0;
 
 
 //画像
-var src = "./img/ace.jpg";
+var src = "./img/sampleBlock.jpg";
 var img = new Image();
 img.src = src;
 
@@ -235,62 +235,81 @@ function freeze(){
       }
     }
   }
-  //timerでtick的な関数
-  // flash = setInterval(tick2,speed);
+  // //timerでtick的な関数
+  // if(progress !== 0){
+  //   flash = setInterval(tick2,50);
+  // }
 }
 
 function tick2(){
-  //現在の高さ
-  var currentHeight = (shapes[progress].length) / 4;
-
-  //エスケープ処理
-  if(currentHeight <= 1){
-    currentHeight = 1;
-  }
-
-
-  //ブロックを下向きに動かす
-  if(tickFlg === 0 && currentY < 11){
-    currentY++;
-    //SEを鳴らす
-    // if(currentY === 11){
-    //   se1();
-    // }
-  }
-
-  //ブロックを上向きに動かす
-  else if(currentY < 0){
-    if(currentY <= 0 && minusFlg === 0){
-      --currentY;
-      //エスケープ処理
-      if(currentY === -currentHeight){
-        se1();
-        minusFlg = 1;
-      }
-    }
-
-    //上限に達したらブロックの進行方向を下向きにする
-    else if(currentY <= 0 && minusFlg === 1){
-      currentY++;
-      if(currentY === 0){
-        minusFlg = 0;
-        tickFlg = 0;
-        // return false;
-      }
+  // console.log('hit');
+  var currentBlockWidth = blockWidth[progress];
+  for(var x = currentX; x < currentX + currentBlockWidth; x++){
+    for(var y = ROWS - 1; y >= safeBottom; --y){
+      // console.log(board[y][x]);
+      board[y][x] = 1;
+      board[y - 1][x] = 0;
+      board[ROWS - 1][x] = 0;
     }
   }
 
-  else if(progress === 9 && currentY === 0){
-    currentY = -1;
-    minusFlg = 0;
-    tickFlg = 0;
-  }
 
-  //ブロックを上向きに動かす
-  else {
-    --currentY;
-    tickFlg = 1;
-  }
+  //safebottom，ROWS, currentBlockWidth
+  //ROWSからsafeBottomまでのボトムアップ
+  //下のブロックを1, 上のブロックを0 をループでROWSからsafeBottomまで繰り返す
+
+
+  // //現在の高さ
+  // var currentHeight = (shapes[progress].length) / 4;
+  //
+  // //エスケープ処理
+  // if(currentHeight <= 1){
+  //   currentHeight = 1;
+  // }
+  //
+  //
+  // //ブロックを下向きに動かす
+  // if(tickFlg === 0 && currentY < 11){
+  //   currentY++;
+  //   //SEを鳴らす
+  //   // if(currentY === 11){
+  //   //   se1();
+  //   // }
+  // }
+  //
+  // //ブロックを上向きに動かす
+  // else if(currentY < 0){
+  //   if(currentY <= 0 && minusFlg === 0){
+  //     --currentY;
+  //     //エスケープ処理
+  //     if(currentY === -currentHeight){
+  //       se1();
+  //       minusFlg = 1;
+  //     }
+  //   }
+  //
+  //   //上限に達したらブロックの進行方向を下向きにする
+  //   else if(currentY <= 0 && minusFlg === 1){
+  //     currentY++;
+  //     if(currentY === 0){
+  //       minusFlg = 0;
+  //       tickFlg = 0;
+  //       // return false;
+  //     }
+  //   }
+  // }
+  //
+  // else if(progress === 9 && currentY === 0){
+  //   currentY = -1;
+  //   minusFlg = 0;
+  //   tickFlg = 0;
+  // }
+  //
+  // //ブロックを上向きに動かす
+  // else {
+  //   --currentY;
+  //   tickFlg = 1;
+  // }
 }
 
 
@@ -356,6 +375,7 @@ function check(){
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = currentTop; y < safeTop; y++){
             if(board[y][x]){
+              // console.log('hit');
               board[y][x] = 0;
             }
           }
@@ -368,9 +388,11 @@ function check(){
         for(var x = currentX; x < currentX + currentBlockWidth; x++){
           for(var y = safeBottom; y < ROWS; y++){
             if(board[y][x] === 1){
-              // board[y][x] = 0;
+              // console.log('hit');
+              // console.log(y, x);
+              board[y][x] = 0;
               // setInterval(fadeOut(y, x), 50);
-              fadeOut(y,x);
+              // fadeOut(y,x);
             }
           }
         }
@@ -380,6 +402,10 @@ function check(){
     safeTop = currentTop;
     safeBottom = currentBottom;
 
+    //timerでtick的な関数
+    // if(progress !== 0){
+    //   flash = setInterval(tick2,50);
+    // }
   }
 }
 

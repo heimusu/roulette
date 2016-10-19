@@ -73,6 +73,7 @@ function keyPress( key ) {
       breakFlg = 1;
     }
     else if(breakFlg ===1 ){
+      clearInterval(flash);
       breakFlg = 0;
       newShape();
       go();
