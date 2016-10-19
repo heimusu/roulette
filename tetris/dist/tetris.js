@@ -60,10 +60,7 @@ Board.prototype.freeze = function(pos, block) {
   }
   this.safeTop = Math.max(pos.y, this.safeTop);
   this.safeBottom = Math.min(pos.y + block.height, this.safeBottom);
-  console.log("safeTop: " + this.safeTop );
-  console.log("safeBottom: " + this.safeBottom );
-
-  return this.safeTop <= this.safeBottom;
+  return this.safeTop < this.safeBottom;
 }
 
 var Game = function() {
@@ -88,12 +85,13 @@ Game.prototype.freeze = function(){
   var bottomFallingBlockHeight = (this.current.y + this.currentBlock.height) - this.board.safeBottom;
 
   if (topFallingBlockHeight > 0) {
-    block = new Block(width, topFallingBlockHeight);
-    this.fallingBlocks.push(new Current(this.current, block));
+    var block = new Block(width, topFallingBlockHeight);
+    var pos = new Point(this.current.x, this.current.y);
+    this.fallingBlocks.push(new Current(pos, block));
   }
   if (bottomFallingBlockHeight > 0) {
-    block = new Block(width, bottomFallingBlockHeight);
-    this.fallingBlocks.push(new Current(new Point(this.current.x, this.current.y + this.currentBlock.height), block));
+    var block = new Block(width, bottomFallingBlockHeight);
+    this.fallingBlocks.push(new Current(new Point(this.current.x, this.board.safeBottom), block));
   }
 
   return isFreeze;
@@ -155,6 +153,10 @@ Game.prototype.tick = function() {
   else {
     --this.current.y;
     this.tickFlg = 1;
+  }
+
+  for(var current of game.fallingBlocks) {
+    current.position.y += 1;
   }
 };
 
