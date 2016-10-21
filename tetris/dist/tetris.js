@@ -28,8 +28,18 @@ var BlockPattern = [
 ];
 
 var MaxProgress = BlockPattern.length - 1;
+//debug
 // var SpeedTable = [50, 50, 48, 48, 48, 46, 46, 44, 44, 44, 44];
-var SpeedTable = [30, 30, 26, 26, 26, 22, 22, 22, 20, 20, 18];
+
+//中級
+// var SpeedTable = [30, 30, 26, 26, 26, 22, 22, 22, 20, 20, 18];
+
+//上級
+var SpeedTable = [20, 20, 16, 16, 16, 12, 12, 12, 10, 10, 8];
+
+//超上級
+//破壊級
+//地獄級
 
 var Board = function() {
   this._table = [];
@@ -171,18 +181,20 @@ Game.prototype.tick = function() {
 
 Game.prototype.gameOver = function() {
   this.sound.play(SoundType.GameOver);
-  alert('game over');
   this.progress = 12;
   this.board.init();  // 盤面をまっさらにする
 };
 
 Game.prototype.clear = function() {
-  alert('clear');
+  // alert('clear');
+  this.sound.play(SoundType.Clear);
 };
 
 Game.prototype.go = function() {
   var speed = SpeedTable[this.progress];
-  this.sound.play(SoundType.Bgm);
+  if(this.progress === 0){
+    this.sound.play(SoundType.Bgm);
+  }
   this.sound.play(SoundType.Move);
   var self = this;
   this.interval = setInterval(function(){self.tick()} , speed);
@@ -202,7 +214,7 @@ Game.prototype.select = function() {
   if(game.breakFlg === 0){
     clearInterval(this.interval);
     this.sound.play(SoundType.Select);
-    this.sound.stop(SoundType.Bgm);
+    // this.sound.stop(SoundType.Bgm);
     this.sound.stop(SoundType.Move);
     if (this.freeze()) {
       if (this.progress == MaxProgress) {
@@ -214,14 +226,20 @@ Game.prototype.select = function() {
       this.lose = true;
     }
 
-    if (this.progress === 2) {
+    if (this.progress === 3) {
       $('#img1').fadeIn('slow');
+      this.sound.stop(SoundType.Bgm);
+      this.sound.play(SoundType.Sr);
     }
     else if (this.progress === 5) {
       $('#img2').fadeIn('slow');
+      this.sound.stop(SoundType.Bgm);
+      this.sound.play(SoundType.Ssr);
     }
     else if (this.progress === 9) {
       $('#img3').fadeIn('slow');
+      this.sound.stop(SoundType.Bgm);
+      this.sound.play(SoundType.Clear);
     }
 
     ++this.progress;

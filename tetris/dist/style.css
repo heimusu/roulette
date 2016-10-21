@@ -17,7 +17,7 @@ canvas {
     /*height: 80%;*/
     height: 100%;
     box-sizing: border-box;
-    background-image: url('./img/bg1.jpg');
+    /*background-image: url('./img/bg1.jpg');*/
 }
 /*学び*/
 /*canvas:before{
@@ -26,9 +26,21 @@ canvas {
   padding-top: 100%;
 }*/
 
-
-img {
+#bg {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+img {
+  display: block;
+  width: 50%;
+  height: 50%;
+}
+
+.blockText{
+   position: absolute;
+   top: 80px;
+   left:600px;
+   display:none;
 }
