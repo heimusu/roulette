@@ -16,7 +16,7 @@ document.getElementsByTagName('canvas')[0].width = window.parent.screen.width;
 document.getElementsByTagName('canvas')[0].height = window.parent.screen.height;
 
 //画像
-var src = "./img/sampleBlock.jpg";
+var src = "./img/BLOCK.jpg";
 var img = new Image();
 img.src = src;
 
