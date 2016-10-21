@@ -20,16 +20,16 @@ var BlockPattern = [
   new Block(1,8),
   new Block(1,7),
   new Block(1,6),
-  new Block(4,5),
-  new Block(1,4),
+  new Block(3,5),
+  new Block(2,4),
   new Block(2,6),
   new Block(3,2),
   new Block(1,1)
 ];
 
 var MaxProgress = BlockPattern.length - 1;
-var SpeedTable = [50, 50, 48, 48, 48, 46, 46, 44, 44, 44, 44];
-// var SpeedTable = [30, 30, 26, 26, 26, 22, 22, 22, 20, 20, 18];
+// var SpeedTable = [50, 50, 48, 48, 48, 46, 46, 44, 44, 44, 44];
+var SpeedTable = [30, 30, 26, 26, 26, 22, 22, 22, 20, 20, 18];
 
 var Board = function() {
   this._table = [];
@@ -124,7 +124,6 @@ Game.prototype.tick = function() {
     currentHeight = 1;
   }
 
-  console.log(this.current.y);
 
   //ブロックを下向きに動かす
   if(this.tickFlg === 0 && this.current.y < this.board.height - 1){

@@ -17,6 +17,7 @@ canvas {
     /*height: 80%;*/
     height: 100%;
     box-sizing: border-box;
+    background-image: url('./img/bg1.jpg');
 }
 /*学び*/
 /*canvas:before{

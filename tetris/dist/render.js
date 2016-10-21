@@ -16,7 +16,7 @@ document.getElementsByTagName('canvas')[0].width = window.parent.screen.width;
 document.getElementsByTagName('canvas')[0].height = window.parent.screen.height;
 
 //画像
-var src = "./img/sampleBlock.jpg";
+var src = "./img/BLOCK.jpg";
 var img = new Image();
 img.src = src;
 
@@ -24,7 +24,7 @@ img.src = src;
 function drawBlock( x, y ) {
   // ctx.fillRect( BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1 );
   // ctx.strokeRect( BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1 );
-  ctx.drawImage(img, BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1);
+  ctx.drawImage(img, BLOCK_W * x * 0.95, BLOCK_H * y * 0.95, BLOCK_W - 1 , BLOCK_H - 1);
 }
 
 function drawFallingBlocks(current) {
