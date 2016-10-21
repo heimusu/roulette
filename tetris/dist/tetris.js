@@ -22,13 +22,14 @@ var BlockPattern = [
   new Block(1,6),
   new Block(4,5),
   new Block(1,4),
-  new Block(2,12),
+  new Block(2,6),
   new Block(3,2),
   new Block(1,1)
 ];
 
 var MaxProgress = BlockPattern.length - 1;
 var SpeedTable = [50, 50, 48, 48, 48, 46, 46, 44, 44, 44, 44];
+// var SpeedTable = [30, 30, 26, 26, 26, 22, 22, 22, 20, 20, 18];
 
 var Board = function() {
   this._table = [];
@@ -79,7 +80,7 @@ var Game = function() {
 
 Game.prototype.freeze = function(){
   var isFreeze = this.board.freeze(this.current, this.currentBlock);
-
+  // console.log(this.current);
   var width = this.currentBlock.width;
 
   var topFallingBlockHeight = this.board.safeTop - this.current.y;
@@ -99,6 +100,7 @@ Game.prototype.freeze = function(){
 };
 
 Game.prototype.newShape = function() {
+  console.log(this.progress);
   if (this.currentBlock != null) {
     // ブロック配置後: 配置前のブロックの横幅を加算
     this.current.x += this.currentBlock.width;
@@ -122,13 +124,15 @@ Game.prototype.tick = function() {
     currentHeight = 1;
   }
 
+  console.log(this.current.y);
+
   //ブロックを下向きに動かす
   if(this.tickFlg === 0 && this.current.y < this.board.height - 1){
     ++this.current.y;
     //SEを鳴らす
-    if(this.current.y === this.board.height - 1){
-      this.sound.play(SoundType.Reflect);
-    }
+    // if(this.current.y === this.board.height - 1){
+    //   this.sound.play(SoundType.Reflect);
+    // }
   }
   //ブロックを上向きに動かす
   else if(this.current.y < 0){
@@ -136,8 +140,13 @@ Game.prototype.tick = function() {
       --this.current.y;
       //エスケープ処理
       if(this.current.y === -currentHeight){
-        this.sound.play(SoundType.Reflect);
+        // this.sound.play(SoundType.Reflect);
         this.minusFlg = 1;
+      }
+      else if(currentHeight === 1){
+          this.minusFlg = 0;
+          this.tickFlg = 0;
+          this.current.y = 0;
       }
     }
     //上限に達したらブロックの進行方向を下向きにする
@@ -146,7 +155,7 @@ Game.prototype.tick = function() {
       if(this.current.y === 0){
         this.minusFlg = 0;
         this.tickFlg = 0;
-        return false;
+        // return false;
       }
     }
   }
