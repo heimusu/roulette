@@ -1,3 +1,4 @@
+
 var Point = function(x, y) {
   this.x = x;
   this.y = y;
@@ -32,7 +33,7 @@ var SpeedTable = [50, 50, 48, 48, 48, 46, 46, 44, 44, 44, 44];
 var Board = function() {
   this._table = [];
   this.width = 16;
-  this.height = 12; 
+  this.height = 12;
 };
 
 Board.prototype.init = function() {
