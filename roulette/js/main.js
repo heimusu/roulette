@@ -156,9 +156,18 @@ $(function() {
   // slot2 = new Slot2(data.reward[rewardIndex]);
   console.log(data);
   return $(document).keypress(function(e) {
+    console.log(e);
     if (e.which === 13) {
       slot.push();
       return false;
     }
+    else if(e.which === 109){
+      var random;
+      random = Math.floor( Math.random() * 5 ) ;
+      $('#lg1').css('display', 'block');
+      document.getElementById("lg1").play();
+      return false;
+    }
+
   });
 });
