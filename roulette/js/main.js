@@ -26,6 +26,9 @@ parseUrlParam = function() {
   return arg;
 };
 
+
+//teamList用slot
+//オリジナル
 Slot = (function() {
   function Slot(symbols) {
     var i;
@@ -128,10 +131,119 @@ Slot = (function() {
 
 })();
 
+//reward用スロット
+//imitation
+Slot2 = (function() {
+  function Slot2(symbols) {
+    var i;
+    this.symbols = symbols;
+    this.state = 0;
+    this.Slot2HtmlUnit = shuffle(this.symbols).map(function(_) {
+      return "<div class='symbol'><p>" + _.name + "</p></div>";
+    }).join('\n');
+    this.Slot2Html = [
+      (function() {
+        var j, results;
+        results = [];
+        for (i = j = 0; j < 2; i = ++j) {
+          results.push(this.Slot2HtmlUnit);
+        }
+        return results;
+      }).call(this)
+    ].join('');
+    $('#roulette-inner2').html(this.Slot2Html);
+    this.unitHeight = 10 * 5.0;
+  }
+
+  Slot2.prototype.stop = function($obj) {
+    var count, marginTop, slideCount, time;
+    if (this.state !== 2) {
+      return;
+    }
+    slideCount = 10;
+    time = 400 * slideCount;
+    $obj.stop(true, true);
+    marginTop = parseInt($obj.css("margin-top"), 10);
+    marginTop -= this.unitHeight * slideCount;
+    count = Math.floor(marginTop / this.unitHeight);
+    marginTop = this.unitHeight * count;
+    console.log(marginTop);
+    return $obj.animate({
+      "margin-top": marginTop + "px"
+    }, {
+      'duration': time,
+      'easing': "easeOutElastic",
+      'complete': (function(_this) {
+        return function() {
+          var i;
+          marginTop = parseInt($obj.css("margin-top"), 10);
+          _this.Slot2Html = [
+            (function() {
+              var j, results;
+              results = [];
+              for (i = j = 0; j < 2; i = ++j) {
+                results.push(this.Slot2HtmlUnit);
+              }
+              return results;
+            }).call(_this)
+          ].join('');
+          $('#roulette-inner2').html(_this.Slot2Html);
+          marginTop %= _this.unitHeight * _this.symbols.length;
+          $obj.css('margin-top', marginTop + 'px');
+          return _this.state = 0;
+        };
+      })(this)
+    });
+  };
+
+  Slot2.prototype.move = function($obj) {
+    var count, marginTop, time;
+    if (this.state !== 1) {
+      return;
+    }
+    this.Slot2Html += this.Slot2HtmlUnit;
+    $('#roulette-inner2').html(this.Slot2Html);
+    time = 25 * this.symbols.length;
+    marginTop = parseInt($obj.css("margin-top"), 10);
+    marginTop -= this.unitHeight * this.symbols.length;
+    count = Math.floor(marginTop / this.unitHeight);
+    marginTop = this.unitHeight * count;
+    return $obj.animate({
+      "margin-top": marginTop + "px"
+    }, {
+      'duration': time,
+      'easing': "linear",
+      'complete': (function(_this) {
+        return function() {
+          return _this.move($('#roulette-inner2'));
+        };
+      })(this)
+    });
+  };
+
+  Slot2.prototype.push = function() {
+    if (this.state === 0) {
+      this.state = 1;
+      return this.move($('#roulette-inner2'));
+    } else if (this.state === 1) {
+      this.state = 2;
+      return this.stop($('#roulette-inner2'));
+    }
+  };
+
+  return Slot2;
+
+})();
+
+
+
+
 $(function() {
-  var args, slot, teamIndex, teamList;
+  var args, slot, slot2, teamIndex, teamList, rewardIndex, rewardList;
   args = parseUrlParam();
+  console.log(args);
   slot = null;
+  slot2 = null;
   if ((args.team != null) && args.team !== 'all') {
     teamIndex = parseInt(args.team);
     slot = new Slot(data.team[teamIndex]);
@@ -139,6 +251,11 @@ $(function() {
     teamList = Array.prototype.concat.apply([], data.team);
     slot = new Slot(teamList);
   }
+  rewardIndex = parseInt(args.reward);
+  console.log(args.reward);
+  console.log(data.reward[rewardIndex]);
+  slot2 = new Slot2(data.reward[rewardIndex]);
+  console.log(data);
   return $(document).keypress(function(e) {
     if (e.which === 13) {
       slot.push();

@@ -112,3 +112,36 @@ body {
   margin-top:200px;
   text-align: left;
 }
+
+
+#roulette-container2 {
+  margin: 100px 0 0 255px;
+  width: 480px;
+  height: 562.5px;
+  font-size: 0;
+  overflow: hidden;
+}
+/* line 20, ../sass/screen.scss */
+#roulette-container2 #roulette-inner2 div.symbol {
+  background-color: #fff;
+  border: solid 5px #000;
+  width: 460px;
+  height: 40px;
+  text-align: center;
+  font-size: 30px;
+}
+
+/* line 30, ../sass/screen.scss */
+#pick2 {
+  position: absolute;
+  top: 250px;
+  /*top:266px;*/
+  /*left: 255px;*/
+  border: solid 5px rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 0, 0, 0.5);
+  width: 460px;
+  height: 40px;
+  text-align: center;
+  margin: 100px 0 0 255px;
+
+}
