@@ -35,7 +35,7 @@ Slot = (function() {
     this.symbols = symbols;
     this.state = 0;
     this.slotHtmlUnit = shuffle(this.symbols).map(function(_) {
-      return "<div class='symbol'><p>" + _.name + "</p></div>";
+      return "<div class='symbol'><br><p>" + _.name + "</p></div>";
     }).join('\n');
     this.slotHtml = [
       (function() {
@@ -48,10 +48,13 @@ Slot = (function() {
       }).call(this)
     ].join('');
     $('#roulette-inner').html(this.slotHtml);
-    this.unitHeight = 10 * 5.0;
+    // this.unitHeight = 10 * 5.0;
+    this.unitHeight = 10 * 11.0;
+
   }
 
   Slot.prototype.stop = function($obj) {
+    console.log(this);
     var count, marginTop, slideCount, time;
     if (this.state !== 2) {
       return;
