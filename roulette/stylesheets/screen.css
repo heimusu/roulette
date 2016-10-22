@@ -75,14 +75,14 @@ body {
   padding:0;
   margin: 0;
   height:100%;
-  overflow: hidden;;
+  /*overflow: hidden;;*/
   background-color: #993600;
   text-align: center;
   position: absolute;
   top: 0;
   width: 100%;
   /* 画像ファイルの指定 */
-  background-image: url('../imgs/bg1.jpg');
+  background-image: url('../imgs/common_bg0.png');
 
   /* 画像を常に天地左右の中央に配置 */
   background-position: center center;
@@ -100,20 +100,62 @@ body {
 /* line 13, ../sass/screen.scss */
 
 
+/*#roulette-inner::before{
+  position: absolute;
+  content: "";
+  right: -13%;
+  width: 100%;
+  padding-top: 100%;
+  background: url("../imgs/common_bg1.png") top left no-repeat;
+}*/
+
+.bg{
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../imgs/common_bg1.png") no-repeat;
+  background-size: 100%;
+  z-index:2;
+}
+
 #roulette-container {
   /*margin: 100px 0 0 255px;*/
   /*width: 480px;*/
   /*height: 562.5px;*/
-  height: 73%;
+  margin: 0;
+  width: 60%;
+  height: 75%;
   font-size: 0;
   overflow: hidden;
+  z-index: 3;
+  /*background: url("../imgs/common_bg1.png") no-repeat;
+  background-size: cover;*/
+  /*background: url("../imgs/common_bg1.png") no-repeat 0 50%;*/
+
+  /* 画像ファイルの指定 */
+  /*background-image: url('../imgs/common_bg1.png');*/
+
+  /* 画像を常に天地左右の中央に配置 */
+  /*background-position: center center;*/
+
+  /* 画像をタイル状に繰り返し表示しない */
+  /*background-repeat: no-repeat;*/
+
+  /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
+  /*background-attachment: fixed;*/
+
+  /* 表示するコンテナの大きさに基づいて、背景画像を調整 */
+  /*background-size: cover;*/
 }
 /* line 20, ../sass/screen.scss */
 #roulette-container #roulette-inner div.symbol {
   background-color: #fff;
   border: solid 5px #000;
   /*width: 460px;*/
-  width: 60%;
+  /*width: 74%;*/
   /*height: 40px;*/
   height: 100px;
   text-align: center;
@@ -122,11 +164,14 @@ body {
 
 }
 
+
+
 /* line 30, ../sass/screen.scss */
 #pick {
   position: absolute;
+  /*position: relative;*/
   top: 740px;
-  left: 525px;
+  left: 527px;
   width: 59%;
   /*top:266px;*/
   /*left: 255px;*/
@@ -141,15 +186,32 @@ body {
 
 .wrapper{
   display: block;
-  width: 98%;
+  /*width: 98%;*/
   height: 100%;
   /*width: 1000px;*/
   margin: 0 auto;
   /*margin-top:300px;*/
-  text-align: left;
+  /*text-align: left;
   position: relative;
   top: 300px;
-  left: 500px;
+  left: 500px;*/
+
+  /* 画像ファイルの指定 */
+  background-image: url('../imgs/common_bg1.png');
+
+  /* 画像を常に天地左右の中央に配置 */
+  background-position: center center;
+
+  /* 画像をタイル状に繰り返し表示しない */
+  background-repeat: no-repeat;
+
+  /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
+  background-attachment: fixed;
+
+  /* 表示するコンテナの大きさに基づいて、背景画像を調整 */
+  /*background-size: cover;*/
+  background-size: contain;
+  /*z-index: 2;*/
 
 }
 
@@ -160,3 +222,31 @@ video{
   width: 100%;
   height: 100%;
 }
+
+.top{
+  display: block;
+  width: 100%;
+  height: 20%;
+  /*background-color: #fff;*/
+}
+
+
+
+.left{
+  display: block;
+  /*position: absolute;
+  top: 0;
+  left: 0;*/
+  float: left;
+  width: 20%;
+  height: 100%;
+  /*background-color: #fff;*/
+}
+
+/*.right{
+  display: block;
+  float: right;
+  width: 10%;
+  height:100%;
+  background-color: #000;
+}*/

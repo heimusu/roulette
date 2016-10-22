@@ -164,8 +164,32 @@ $(function() {
     else if(e.which === 109){
       var random;
       random = Math.floor( Math.random() * 5 ) ;
-      $('#lg1').css('display', 'block');
-      document.getElementById("lg1").play();
+      console.log(random + 1);
+      var mode = location.search.substring(1).split('&')[1].split('=')[1];
+      // console.log(mode);
+      if(mode === 'sr'){
+        var videoId = mode + (random + 1);
+        console.log(videoId);
+        $('#' + videoId).css('display', 'block');
+        console.log(document.getElementById(videoId));
+        document.getElementById(videoId).play();
+      }
+      else if(mode === 'ssr'){
+        var videoId = mode + (random + 1);
+        $('#' + videoId).css('display', 'block');
+        document.getElementById(videoId).play();
+      }
+
+      else if(mode === 'lg'){
+        console.log('psvr');
+        $('#lg1').css('display', 'block');
+        document.getElementById("lg1").play();
+      }
+
+      else if(mode === 'pr'){
+
+      }
+
       return false;
     }
 
